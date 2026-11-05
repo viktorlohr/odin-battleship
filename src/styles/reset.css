@@ -1,0 +1,373 @@
+/*!
+ * Modern Normalize + Reset
+ * A small, opinionated baseline for modern browsers.
+ * Uses :where() so every rule has zero specificity and is trivial to override.
+ */
+
+/* ==========================================================================
+   1. Box model
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. Document
+   ========================================================================== */
+
+html {
+  /* Stop iOS/Android from inflating text in landscape */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Consistent tab width */
+  tab-size: 4;
+  /* Respect user font-size settings; 1rem stays meaningful */
+  font-size: 100%;
+  /* Prevent layout shift when scrollbars appear */
+  scrollbar-gutter: stable;
+  /* Smooth in-page anchor jumps, unless the user prefers otherwise (see below) */
+  scroll-behavior: smooth;
+  /* Let UI controls and scrollbars follow the page's light/dark scheme */
+  color-scheme: light dark;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  line-height: 1.5;
+  font-family:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   3. Margin and padding reset
+   ========================================================================== */
+
+:where(body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, pre, hr, fieldset, legend) {
+  margin: 0;
+}
+
+:where(fieldset, legend, ul, ol, menu) {
+  padding: 0;
+}
+
+/* ==========================================================================
+   4. Text
+   ========================================================================== */
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+:where(p, li, figcaption, blockquote) {
+  text-wrap: pretty;
+}
+
+/* Long words and URLs shouldn't break layouts */
+:where(p, h1, h2, h3, h4, h5, h6, li, dd, dt, figcaption, blockquote) {
+  overflow-wrap: break-word;
+}
+
+:where(a) {
+  color: inherit;
+  text-decoration-skip-ink: auto;
+}
+
+:where(a:not([class])) {
+  text-underline-offset: 0.15em;
+}
+
+:where(b, strong) {
+  font-weight: bolder;
+}
+
+:where(small) {
+  font-size: 80%;
+}
+
+/* Prevent sub/sup from affecting line height */
+:where(sub, sup) {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+:where(sub) {
+  bottom: -0.25em;
+}
+
+:where(sup) {
+  top: -0.5em;
+}
+
+:where(abbr[title]) {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+:where(mark) {
+  color: inherit;
+}
+
+/* Monospace: fix the odd default font-size scaling */
+:where(code, kbd, samp, pre) {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  font-size: 1em;
+}
+
+:where(pre) {
+  overflow: auto;
+  tab-size: 4;
+}
+
+/* ==========================================================================
+   5. Lists
+   ========================================================================== */
+
+/* Remove bullets only when the list is explicitly given a role,
+   which preserves list semantics in VoiceOver/Safari. */
+:where(ul, ol)[role="list"] {
+  list-style: none;
+}
+
+:where(menu) {
+  list-style: none;
+}
+
+/* ==========================================================================
+   6. Embedded content
+   ========================================================================== */
+
+:where(img, picture, video, canvas, svg, audio, iframe, embed, object) {
+  display: block;
+  max-width: 100%;
+}
+
+:where(img, video) {
+  height: auto;
+}
+
+:where(img) {
+  /* Nicer alt text rendering for broken images */
+  font-style: italic;
+  vertical-align: middle;
+  /* Avoid blurry resizing artefacts */
+  shape-margin: 0.75rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+:where(svg:not([fill])) {
+  fill: currentColor;
+}
+
+:where(iframe) {
+  border: 0;
+}
+
+:where(audio:not([controls])) {
+  display: none;
+}
+
+/* ==========================================================================
+   7. Tables
+   ========================================================================== */
+
+:where(table) {
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-indent: 0;
+  border-color: inherit;
+}
+
+:where(th) {
+  text-align: start;
+}
+
+/* ==========================================================================
+   8. Forms
+   ========================================================================== */
+
+:where(button, input, select, textarea, optgroup) {
+  font: inherit;
+  font-size: 100%;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+:where(textarea) {
+  resize: vertical;
+  min-height: 2lh;
+}
+
+:where(textarea:not([rows])) {
+  min-height: 6lh;
+}
+
+:where(button, [type="button"], [type="reset"], [type="submit"]) {
+  appearance: button;
+  -webkit-appearance: button;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: inherit;
+}
+
+:where(button, [type="button"], [type="reset"], [type="submit"], [role="button"], summary, label[for], select) {
+  cursor: pointer;
+}
+
+:where(button:disabled, [type="button"]:disabled, [type="reset"]:disabled, [type="submit"]:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+}
+
+/* Remove inner border/padding in Firefox */
+:where(button, [type="button"], [type="reset"], [type="submit"])::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+:where(select) {
+  text-transform: none;
+}
+
+:where(input::placeholder, textarea::placeholder) {
+  color: inherit;
+  opacity: 0.5;
+}
+
+:where(fieldset) {
+  border: 0;
+  min-width: 0;
+}
+
+:where(legend) {
+  display: table;
+  max-width: 100%;
+  white-space: normal;
+}
+
+:where(progress) {
+  vertical-align: baseline;
+}
+
+/* Correct cursor style of increment/decrement buttons */
+:where([type="number"])::-webkit-inner-spin-button,
+:where([type="number"])::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/* Search inputs: consistent appearance and no stray decoration */
+:where([type="search"]) {
+  appearance: textfield;
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+:where([type="search"])::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* Fix "inability to style clickable types" in iOS/Safari */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+/* Prevent iOS zoom on input focus */
+@media (max-width: 768px) {
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"]), select, textarea) {
+    font-size: max(1rem, 16px);
+  }
+}
+
+/* ==========================================================================
+   9. Interactive elements
+   ========================================================================== */
+
+:where(summary) {
+  display: list-item;
+}
+
+:where(dialog:not([open])) {
+  display: none;
+}
+
+:where(dialog) {
+  color: inherit;
+  background: Canvas;
+}
+
+/* ==========================================================================
+   10. Focus
+   ========================================================================== */
+
+/* Visible only for keyboard users; hidden for pointer interaction */
+:where(:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+:where(:focus:not(:focus-visible)) {
+  outline: none;
+}
+
+/* Keep anchored targets clear of any sticky header */
+:where([id]) {
+  scroll-margin-block: 5ex;
+}
+
+/* ==========================================================================
+   11. Misc
+   ========================================================================== */
+
+:where(hr) {
+  height: 0;
+  color: inherit;
+  border: 0;
+  border-block-start: 1px solid;
+  overflow: visible;
+}
+
+/* Honour the HTML `hidden` attribute even when `display` is set elsewhere */
+:where([hidden]:not([hidden="until-found"])) {
+  display: none !important;
+}
+
+/* Create a root stacking context so z-index on components stays contained */
+:where(#root, #__next, #app) {
+  isolation: isolate;
+}
+
+/* ==========================================================================
+   12. Accessibility: motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
