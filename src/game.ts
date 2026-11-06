@@ -1,8 +1,8 @@
-import type { GameState } from "./domain/gamestate";
+// import type { GameState } from "./domain/gamestate";
 
-export const Game = {
-  state,
-  playRound,
-};
+// export const Game = {
+//   state,
+//   playRound,
+// };
 
-let state: GameState;
+// let state: GameState;
