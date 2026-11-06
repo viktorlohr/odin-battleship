@@ -1,19 +1,33 @@
-import type { Gameboard } from "./gameboard";
+import {
+  areCoordsEqual,
+  recieveAttack,
+  type CoordPair,
+  type Gameboard,
+} from "./gameboard";
 
 export type PlayerId = "A" | "B";
 
 export interface GameState {
-  currentPlayer: PlayerId;
-  boards: Record<PlayerId, Gameboard>;
+  readonly currentPlayer: PlayerId;
+  readonly boards: Record<PlayerId, Gameboard>;
 }
 
-function modifyCurrentGameboard(
+export function attack(
   state: GameState,
-  f: (s: Gameboard) => Gameboard,
-) {
-  const boards = state.boards;
-  const currPlayer = state.currentPlayer;
-  const modifiedBoard = f(boards[currPlayer]);
+  coordPair: CoordPair,
+): GameState | AttackError {
+  const enemy = state.currentPlayer === "A" ? "B" : "A";
 
-  return { ...state, boards: { ...boards, currPlayer: modifiedBoard } };
+  return modifyBoard(state, enemy, (b) => {});
+}
+
+function modifyBoard(
+  state: GameState,
+  player: PlayerId,
+  f: (b: Gameboard) => Gameboard,
+): GameState {
+  const boards = state.boards;
+  const modifiedBoard = f(boards[player]);
+
+  return { ...state, boards: { ...boards, [player]: modifiedBoard } };
 }

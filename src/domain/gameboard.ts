@@ -1,7 +1,9 @@
+import { err, ok, type Result } from "./game-error";
 import { type Ship } from "./ship";
 
+export const BOARD_LENGTH = 10;
+
 export interface Gameboard {
-  readonly boardLength: number;
   readonly attackedCoords: CoordPair[];
   readonly placedShips: PlacedShip[];
 }
@@ -9,6 +11,19 @@ export interface Gameboard {
 export interface CoordPair {
   readonly x: number;
   readonly y: number;
+}
+
+export function createCoordPair(x: number, y: number) {
+  const result = { x, y };
+  if (!isCoordInRange(result)) {
+    throw new Error("invalid coords");
+  }
+}
+
+function isCoordInRange(coord: CoordPair): boolean {
+  return Object.values(coord).every(
+    (coord) => 0 <= coord && coord < BOARD_LENGTH,
+  );
 }
 
 export type Direction = "right" | "down";
@@ -19,20 +34,20 @@ export interface ShipPlacementRequest {
   readonly direction: Direction;
 }
 
-export type PlacementError = "ship is too long" | "too close to other ship";
-
 export interface PlacedShip {
   readonly shipCoords: CoordPair[];
 }
 
+export type PlacementError = "ship is too long" | "too close to other ship";
+
 export function createGameboard(): Gameboard {
-  return { boardLength: 10, attackedCoords: [], placedShips: [] };
+  return { attackedCoords: [], placedShips: [] };
 }
 
 export function placeShip(
   board: Gameboard,
   request: ShipPlacementRequest,
-): Gameboard | PlacementError {
+): Result<Gameboard, PlacementError> {
   const shipCoords: CoordPair[] = [];
   const direction = request.direction;
 
@@ -45,11 +60,11 @@ export function placeShip(
     const coord = direction === "right" ? { x: x + i, y } : { x, y: y + i };
 
     if (!isCoordInRange(coord)) {
-      return "ship is too long";
+      return err("ship is too long");
     }
 
     if (occupiedCoords.some((o) => o.x === coord.x && o.y === coord.y)) {
-      return "too close to other ship";
+      return err("too close to other ship");
     }
 
     shipCoords.push(coord);
@@ -59,13 +74,7 @@ export function placeShip(
   console.log(placedShip);
 
   const result = { ...board, placedShips: [...board.placedShips, placedShip] };
-  return result;
-
-  function isCoordInRange(coord: CoordPair): boolean {
-    return Object.values(coord).every(
-      (coord) => 0 <= coord && coord < board.boardLength,
-    );
-  }
+  return ok(result);
 }
 
 export function getAllShipCoords(board: Gameboard): CoordPair[] {
@@ -90,7 +99,7 @@ function getOccupiedCoords(board: Gameboard): CoordPair[] {
   }
 
   function isInRange(x: number) {
-    return 0 <= x && x < board.boardLength;
+    return 0 <= x && x < BOARD_LENGTH;
   }
 }
 
@@ -104,6 +113,19 @@ export function hasLost(board: Gameboard): boolean {
   return board.placedShips.every((s) => isSunk(board.attackedCoords, s));
 }
 
-function areCoordsEqual(p1: CoordPair, p2: CoordPair): boolean {
+export function areCoordsEqual(p1: CoordPair, p2: CoordPair): boolean {
   return p1.x === p2.x && p1.y === p2.y;
+}
+
+export type AttackError = "already attacked these coords";
+
+export function recieveAttack(
+  board: Gameboard,
+  coordPair: CoordPair,
+): Result<Gameboard, AttackError> {
+  if (board.attackedCoords.some((cp) => areCoordsEqual(cp, coordPair))) {
+    return err("already attacked these coords");
+  }
+
+  return ok({ ...board, attackedCoords: [...board.attackedCoords, coordPair] });
 }

@@ -1,3 +1,4 @@
+import { err } from "./game-error";
 import {
   createGameboard,
   isSunk,
@@ -29,18 +30,13 @@ const requests: ShipPlacementRequest[] = [
 test("Should place ships accordingly", () => {
   let board = createGameboard();
   requests.forEach((r) => {
-    const newBoard = placeShip(board, r);
+    const newBoardResult = placeShip(board, r);
 
-    if (newBoard === "ship is too long") {
-      throw new Error("ship asserted as too long even though it isn't");
-    }
-    if (newBoard === "too close to other ship") {
-      throw new Error(
-        "ship asserted to be too close to other ship even though it isn't",
-      );
+    if (!newBoardResult.ok) {
+      return newBoardResult.err;
     }
 
-    board = newBoard;
+    board = newBoardResult.val;
   });
 
   const expectedShips: PlacedShip[] = [
@@ -79,7 +75,7 @@ const invalidreq1: ShipPlacementRequest = {
 test("should complain about ship length", () => {
   const board = createGameboard();
   const complaint: PlacementError = "ship is too long";
-  expect(placeShip(board, invalidreq1)).toEqual(complaint);
+  expect(placeShip(board, invalidreq1)).toEqual(err(complaint));
 });
 
 const invalidreq2: ShipPlacementRequest = {
@@ -89,16 +85,16 @@ const invalidreq2: ShipPlacementRequest = {
 };
 
 test("should complain about other ships", () => {
-  const board = placeShip(createGameboard(), {
+  const boardResult = placeShip(createGameboard(), {
     ship: createShip(2),
     headCoords: { x: 0, y: 0 },
     direction: "right",
   });
-  if (typeof board === "string") {
-    throw new Error("Something went wrong. Check the earlier tests again.");
+  if (!boardResult.ok) {
+    throw new Error("Should not throw. Check the previous tests in this file");
   }
   const complaint: PlacementError = "too close to other ship";
-  expect(placeShip(board, invalidreq2)).toEqual(complaint);
+  expect(placeShip(boardResult.val, invalidreq2)).toEqual(err(complaint));
 });
 
 test("should assert that ship sunk", () => {
