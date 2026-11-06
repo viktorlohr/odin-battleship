@@ -5,6 +5,8 @@ export const Gameboard = {
 };
 
 export interface Gameboard {
+  readonly boardLength: number;
+  readonly boardWidth: number;
   readonly attackedCoords: Coords[];
   readonly placedShips: PlacedShip[];
 }
@@ -16,15 +18,15 @@ export interface Coords {
 
 export type Direction = "horizontal" | "vertical";
 
-export interface PlacementRequest {
+export interface ShipPlacementRequest {
   readonly ship: Ship;
   readonly headCoords: Coords;
   readonly direction: Direction;
 }
 
 export interface PlacedShip {
-  readonly shipId: ShipId;
-  readonly shipCoords: Coord[];
+  readonly ship: Ship;
+  readonly shipCoords: Coords[];
 }
 
-function placeShip(shipP: PlacementRequest): {};
+function placeShip(ShipPlacementRequest: ShipPlacementRequest): {};
