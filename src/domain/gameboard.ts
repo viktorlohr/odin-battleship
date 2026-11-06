@@ -5,8 +5,7 @@ export const Gameboard = {
 };
 
 export interface Gameboard {
-  readonly boardLength: number;
-  readonly boardWidth: number;
+  readonly length: number;
   readonly attackedCoords: Coords[];
   readonly placedShips: PlacedShip[];
 }
@@ -16,7 +15,7 @@ export interface Coords {
   readonly y: number;
 }
 
-export type Direction = "horizontal" | "vertical";
+export type Direction = "x" | "y";
 
 export interface ShipPlacementRequest {
   readonly ship: Ship;
@@ -24,9 +23,30 @@ export interface ShipPlacementRequest {
   readonly direction: Direction;
 }
 
+export type PlacementError = "ship is too long";
+
 export interface PlacedShip {
-  readonly ship: Ship;
   readonly shipCoords: Coords[];
 }
 
-function placeShip(shipPlacementRequest: ShipPlacementRequest): {};
+function placeShip(
+  board: Gameboard,
+  request: ShipPlacementRequest,
+): Gameboard | PlacementError {
+  const shipCoords: Coords[] = [];
+  const direction = request.direction;
+
+  if (request.headCoords[direction] + request.ship.length > board.length) {
+    return "ship is too long";
+  }
+
+  const x = request.headCoords.x;
+  const y = request.headCoords.y;
+  for (let i = 0; i < request.ship.length; i++) {
+    const coord = direction === "x" ? { x: x + i, y } : { x, y: y + i };
+    shipCoords.push(coord);
+  }
+  const placedShip = { shipCoords };
+
+  return { ...board, placedShips: [...board.placedShips, placedShip] };
+}

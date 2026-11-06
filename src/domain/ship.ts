@@ -3,7 +3,7 @@ export const Ship = {
 };
 
 export interface Ship {
-  readonly shipLength: number;
+  readonly length: number;
 }
 
 function create(length: number): Ship {
@@ -11,5 +11,5 @@ function create(length: number): Ship {
     throw new Error("ship length must be between 1 and 5");
   }
 
-  return { shipLength: length };
+  return { length: length };
 }
