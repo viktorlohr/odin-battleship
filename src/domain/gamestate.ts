@@ -1,6 +1,8 @@
 import type { Gameboard } from "./gameboard";
 
+export type PlayerId = "A" | "B";
+
 export interface GameState {
-  boardA: Gameboard;
-  boardB: Gameboard;
+  currentPlayer: PlayerId;
+  boards: Record<PlayerId, Gameboard>;
 }
