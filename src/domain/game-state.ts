@@ -1,6 +1,7 @@
 import { ok, type Result } from "./game-error";
 import {
   createGameboard,
+  getNotYetPlacedShips,
   receiveAttack,
   type CoordPair,
   type Gameboard,
@@ -11,21 +12,24 @@ export type PlayerId = "A" | "B";
 
 export interface GameState {
   readonly currentPlayer: PlayerId;
+  readonly gamePhase: GamePhase;
   readonly boards: Record<PlayerId, Gameboard>;
 }
 
-export type GameError = GameboardError;
+export type GamePhase = "place ships" | "battle";
 
+export type GameError = GameboardError;
 export type GameStateResult = Result<GameState, GameError>;
 
 export function initGameState(): GameState {
   return {
     currentPlayer: "A",
+    gamePhase: "place ships",
     boards: { A: createGameboard(), B: createGameboard() },
   };
 }
 
-export function playTurn(
+export function attack(
   state: GameState,
   coordPair: CoordPair,
 ): GameStateResult {
@@ -60,3 +64,23 @@ export function playTurn(
 
 //   return { ...state, boards: { ...boards, [player]: newBoard } };
 // }
+
+// switch (state.gamePhase.desc) {
+//     case "place ships": {
+//       const shipsToPlace = getNotYetPlacedShips(
+//         state.boards[state.currentPlayer],
+//       );
+
+//       if (shipsToPlace.length === 0) {
+//         return ok({
+//           ...state,
+//           gamePhase: {
+//             desc: "place ships",
+//             isDone: { ...state.gamePhase.isDone, [state.currentPlayer]: true },
+//           },
+//         });
+//       }
+
+//     }
+
+//   }
