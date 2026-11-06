@@ -94,12 +94,16 @@ function getOccupiedCoords(board: Gameboard): CoordPair[] {
   }
 }
 
-export function isSunk(attackedCoords: CoordPair[], ship: PlacedShip) {
+export function isSunk(attackedCoords: CoordPair[], ship: PlacedShip): boolean {
   return ship.shipCoords.every((sc) =>
     attackedCoords.some((ac) => areCoordsEqual(sc, ac)),
   );
 }
 
-function areCoordsEqual(p1: CoordPair, p2: CoordPair) {
+export function hasLost(board: Gameboard): boolean {
+  return board.placedShips.every((s) => isSunk(board.attackedCoords, s));
+}
+
+function areCoordsEqual(p1: CoordPair, p2: CoordPair): boolean {
   return p1.x === p2.x && p1.y === p2.y;
 }
