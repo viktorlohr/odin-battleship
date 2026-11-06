@@ -1,5 +1,5 @@
 import { err, ok, type Result } from "./game-error";
-import { type Ship } from "./ship";
+import { createShip, type Ship } from "./ship";
 
 export const BOARD_LENGTH = 10;
 
@@ -14,7 +14,8 @@ export type GameboardResult = Result<Gameboard, GameboardError>;
 
 export type AttackError = "already attacked these coords";
 
-export type PlacementError = "ship is too long" | "too close to other ship";
+export type PlacementError =
+  "ship is too long" | "too close to other ship" | "already placed this ship";
 
 export interface CoordPair {
   readonly x: number;
@@ -54,6 +55,13 @@ export function placeShip(
   board: Gameboard,
   request: ShipPlacementRequest,
 ): GameboardResult {
+  if (
+    board.placedShips.some(
+      (placedShip) => placedShip.shipCoords.length === request.ship.shipLength,
+    )
+  ) {
+    return err("already placed this ship");
+  }
   const shipCoords: CoordPair[] = [];
   const direction = request.direction;
 
@@ -123,7 +131,7 @@ export function areCoordsEqual(p1: CoordPair, p2: CoordPair): boolean {
   return p1.x === p2.x && p1.y === p2.y;
 }
 
-export function recieveAttack(
+export function receiveAttack(
   board: Gameboard,
   coordPair: CoordPair,
 ): GameboardResult {
@@ -132,4 +140,14 @@ export function recieveAttack(
   }
 
   return ok({ ...board, attackedCoords: [...board.attackedCoords, coordPair] });
+}
+
+export function getNotYetPlacedShips(board: Gameboard): Ship[] {
+  const placedShipLengths = board.placedShips.map((s) => s.shipCoords.length);
+
+  const unplacedLengths = [1, 2, 3, 4, 5].filter(
+    (n) => !placedShipLengths.some((m) => n === m),
+  );
+
+  return unplacedLengths.map((n) => createShip(n));
 }

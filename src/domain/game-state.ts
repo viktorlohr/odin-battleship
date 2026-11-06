@@ -1,6 +1,7 @@
 import { ok, type Result } from "./game-error";
 import {
-  recieveAttack,
+  createGameboard,
+  receiveAttack,
   type CoordPair,
   type Gameboard,
   type GameboardError,
@@ -17,13 +18,20 @@ export type GameError = GameboardError;
 
 export type GameStateResult = Result<GameState, GameError>;
 
+export function initGameState(): GameState {
+  return {
+    currentPlayer: "A",
+    boards: { A: createGameboard(), B: createGameboard() },
+  };
+}
+
 export function playTurn(
   state: GameState,
   coordPair: CoordPair,
 ): GameStateResult {
   const enemy = state.currentPlayer === "A" ? "B" : "A";
 
-  const newBoardResult = recieveAttack(state.boards[enemy], coordPair);
+  const newBoardResult = receiveAttack(state.boards[enemy], coordPair);
   if (!newBoardResult.ok) {
     return newBoardResult;
   }
