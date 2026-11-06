@@ -17,6 +17,11 @@ const requests: ShipPlacementRequest[] = [
     headCoords: { x: 0, y: 7 },
     direction: "down",
   },
+  {
+    ship: createShip(4),
+    headCoords: { x: 2, y: 7 },
+    direction: "right",
+  },
 ];
 
 test("Should place ships accordingly", () => {
@@ -49,6 +54,14 @@ test("Should place ships accordingly", () => {
         { x: 0, y: 7 },
         { x: 0, y: 8 },
         { x: 0, y: 9 },
+      ],
+    },
+    {
+      shipCoords: [
+        { x: 2, y: 7 },
+        { x: 3, y: 7 },
+        { x: 4, y: 7 },
+        { x: 5, y: 7 },
       ],
     },
   ];
