@@ -8,6 +8,14 @@ export interface Gameboard {
   readonly placedShips: PlacedShip[];
 }
 
+export type GameboardError = PlacementError | AttackError;
+
+export type GameboardResult = Result<Gameboard, GameboardError>;
+
+export type AttackError = "already attacked these coords";
+
+export type PlacementError = "ship is too long" | "too close to other ship";
+
 export interface CoordPair {
   readonly x: number;
   readonly y: number;
@@ -38,8 +46,6 @@ export interface PlacedShip {
   readonly shipCoords: CoordPair[];
 }
 
-export type PlacementError = "ship is too long" | "too close to other ship";
-
 export function createGameboard(): Gameboard {
   return { attackedCoords: [], placedShips: [] };
 }
@@ -47,7 +53,7 @@ export function createGameboard(): Gameboard {
 export function placeShip(
   board: Gameboard,
   request: ShipPlacementRequest,
-): Result<Gameboard, PlacementError> {
+): GameboardResult {
   const shipCoords: CoordPair[] = [];
   const direction = request.direction;
 
@@ -117,12 +123,10 @@ export function areCoordsEqual(p1: CoordPair, p2: CoordPair): boolean {
   return p1.x === p2.x && p1.y === p2.y;
 }
 
-export type AttackError = "already attacked these coords";
-
 export function recieveAttack(
   board: Gameboard,
   coordPair: CoordPair,
-): Result<Gameboard, AttackError> {
+): GameboardResult {
   if (board.attackedCoords.some((cp) => areCoordsEqual(cp, coordPair))) {
     return err("already attacked these coords");
   }

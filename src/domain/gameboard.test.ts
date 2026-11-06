@@ -29,6 +29,8 @@ const requests: ShipPlacementRequest[] = [
 
 test("Should place ships accordingly", () => {
   let board = createGameboard();
+
+  // @ts-expect-error lambda expression is expected to return nothing here if result is ok
   requests.forEach((r) => {
     const newBoardResult = placeShip(board, r);
 
