@@ -29,4 +29,4 @@ export interface PlacedShip {
   readonly shipCoords: Coords[];
 }
 
-function placeShip(ShipPlacementRequest: ShipPlacementRequest): {};
+function placeShip(shipPlacementRequest: ShipPlacementRequest): {};
