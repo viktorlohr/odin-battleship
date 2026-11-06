@@ -13,7 +13,7 @@ export interface CoordPair {
   readonly y: number;
 }
 
-export type Direction = "x" | "y";
+export type Direction = "right" | "down";
 
 export interface ShipPlacementRequest {
   readonly ship: Ship;
@@ -38,20 +38,17 @@ export function placeShip(
   const shipCoords: CoordPair[] = [];
   const direction = request.direction;
 
-  if (
-    request.headCoords[direction] + request.ship.shipLength >
-    board.boardLength
-  ) {
-    return "ship is too long";
-  }
-
   const x = request.headCoords.x;
   const y = request.headCoords.y;
 
   const occupiedCoords = getOccupiedCoords(board);
 
   for (let i = 0; i < request.ship.shipLength; i++) {
-    const coord = direction === "x" ? { x: x + i, y } : { x, y: y + i };
+    const coord = direction === "right" ? { x: x + i, y } : { x, y: y + i };
+
+    if (!isCoordInRange(coord)) {
+      return "ship is too long";
+    }
 
     if (occupiedCoords.some((o) => o.x === coord.x || o.y === coord.y)) {
       return "too close to other ship";
@@ -62,6 +59,10 @@ export function placeShip(
   const placedShip = { shipCoords };
 
   return { ...board, placedShips: [...board.placedShips, placedShip] };
+
+  function isCoordInRange(coord: CoordPair): boolean {
+    return Object.values(coord).every((coord) => 0 <= coord && coord < 10);
+  }
 }
 
 export function getAllShipCoords(board: Gameboard): CoordPair[] {
