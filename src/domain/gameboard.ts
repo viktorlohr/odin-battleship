@@ -64,7 +64,9 @@ export function placeShip(
   return result;
 
   function isCoordInRange(coord: CoordPair): boolean {
-    return Object.values(coord).every((coord) => 0 <= coord && coord < 10);
+    return Object.values(coord).every(
+      (coord) => 0 <= coord && coord < board.boardLength,
+    );
   }
 }
 
@@ -90,6 +92,16 @@ function getOccupiedCoords(board: Gameboard): CoordPair[] {
   }
 
   function isInRange(x: number) {
-    return 0 <= x && x < 10;
+    return 0 <= x && x < board.boardLength;
   }
+}
+
+export function isSunk(attackedCoords: CoordPair[], ship: PlacedShip) {
+  return ship.shipCoords.every((sc) =>
+    attackedCoords.some((ac) => areCoordsEqual(sc, ac)),
+  );
+}
+
+function areCoordsEqual(p1: CoordPair, p2: CoordPair) {
+  return p1.x === p2.x && p1.y === p2.y;
 }

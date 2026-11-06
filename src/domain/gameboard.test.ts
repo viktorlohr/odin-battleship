@@ -1,10 +1,10 @@
 import {
   createGameboard,
+  isSunk,
   placeShip,
   type PlacedShip,
   type PlacementError,
   type ShipPlacementRequest,
-  type Gameboard,
 } from "./gameboard";
 import { createShip } from "./ship";
 
@@ -99,4 +99,16 @@ test("should complain about other ships", () => {
   }
   const complaint: PlacementError = "too close to other ship";
   expect(placeShip(board, invalidreq2)).toEqual(complaint);
+});
+
+test("should assert that ship sunk", () => {
+  const attackedCoords = [
+    { x: 0, y: 0 },
+    { x: 1, y: 0 },
+  ];
+  const ship = {
+    shipCoords: [...attackedCoords],
+  };
+
+  expect(isSunk(attackedCoords, ship)).toBe(true);
 });
