@@ -2,11 +2,11 @@ import { type Ship } from "./ship";
 
 export interface Gameboard {
   readonly boardLength: number;
-  readonly attackedCoords: Coords[];
+  readonly attackedCoords: CoordPair[];
   readonly placedShips: PlacedShip[];
 }
 
-export interface Coords {
+export interface CoordPair {
   readonly x: number;
   readonly y: number;
 }
@@ -15,14 +15,14 @@ export type Direction = "x" | "y";
 
 export interface ShipPlacementRequest {
   readonly ship: Ship;
-  readonly headCoords: Coords;
+  readonly headCoords: CoordPair;
   readonly direction: Direction;
 }
 
 export type PlacementError = "ship is too long";
 
 export interface PlacedShip {
-  readonly shipCoords: Coords[];
+  readonly shipCoords: CoordPair[];
 }
 
 export function createGameboard() {
@@ -33,7 +33,7 @@ export function placeShip(
   board: Gameboard,
   request: ShipPlacementRequest,
 ): Gameboard | PlacementError {
-  const shipCoords: Coords[] = [];
+  const shipCoords: CoordPair[] = [];
   const direction = request.direction;
 
   if (
@@ -52,4 +52,8 @@ export function placeShip(
   const placedShip = { shipCoords };
 
   return { ...board, placedShips: [...board.placedShips, placedShip] };
+}
+
+export function getAllShipCoords(board: Gameboard): CoordPair[] {
+  return board.placedShips.flatMap((s) => s.shipCoords);
 }

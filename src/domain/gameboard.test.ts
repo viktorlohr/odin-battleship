@@ -18,12 +18,17 @@ test("Should place ship at [0,0], [1,0]", () => {
     throw new Error("ship asserted as too long even though it isn't");
   }
 
-  const expectedShip = {
-    shipCoords: [
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-    ],
-  };
+  const expectedShips = [
+    {
+      shipCoords: [
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+      ],
+      // shipCoords: [
+      //   {x: }
+      // ]
+    },
+  ];
 
-  expect(newBoard.placedShips).toEqual([expectedShip]);
+  expect(newBoard.placedShips).toEqual(expectedShips);
 });
