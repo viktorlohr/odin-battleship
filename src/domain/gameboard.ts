@@ -1,7 +1,5 @@
 import { type Ship } from "./ship";
 
-const BOARD_LENGTH = 10;
-
 export interface Gameboard {
   readonly boardLength: number;
   readonly attackedCoords: CoordPair[];
@@ -28,7 +26,7 @@ export interface PlacedShip {
 }
 
 export function createGameboard(): Gameboard {
-  return { boardLength: BOARD_LENGTH, attackedCoords: [], placedShips: [] };
+  return { boardLength: 10, attackedCoords: [], placedShips: [] };
 }
 
 export function placeShip(
