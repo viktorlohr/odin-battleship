@@ -1,5 +1,5 @@
-import { Ship } from "./ship";
+import { createShip } from "./ship";
 
 test("Should throw", () => {
-  expect(() => Ship.create(6)).toThrow();
+  expect(() => createShip(6)).toThrow();
 });
