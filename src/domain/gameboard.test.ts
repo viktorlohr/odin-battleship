@@ -14,12 +14,12 @@ const requests: ShipPlacementRequest[] = [
   },
   {
     ship: createShip(3),
-    headCoords: { x: 7, y: 0 },
+    headCoords: { x: 0, y: 7 },
     direction: "down",
   },
 ];
 
-test("Should place ship at [0,0], [1,0]", () => {
+test("Should place ships accordingly", () => {
   let board = createGameboard();
 
   requests.forEach((r) => {
@@ -46,9 +46,9 @@ test("Should place ship at [0,0], [1,0]", () => {
     },
     {
       shipCoords: [
-        { x: 7, y: 0 },
-        { x: 8, y: 0 },
-        { x: 9, y: 0 },
+        { x: 0, y: 7 },
+        { x: 0, y: 8 },
+        { x: 0, y: 9 },
       ],
     },
   ];

@@ -50,7 +50,7 @@ export function placeShip(
       return "ship is too long";
     }
 
-    if (occupiedCoords.some((o) => o.x === coord.x || o.y === coord.y)) {
+    if (occupiedCoords.some((o) => o.x === coord.x && o.y === coord.y)) {
       return "too close to other ship";
     }
 
@@ -69,7 +69,7 @@ export function getAllShipCoords(board: Gameboard): CoordPair[] {
   return board.placedShips.flatMap((s) => s.shipCoords);
 }
 
-export function getOccupiedCoords(board: Gameboard): CoordPair[] {
+function getOccupiedCoords(board: Gameboard): CoordPair[] {
   return getAllShipCoords(board).flatMap((coordPair) =>
     getSurroundingCoordPairs(coordPair),
   );
@@ -77,11 +77,16 @@ export function getOccupiedCoords(board: Gameboard): CoordPair[] {
   function getSurroundingCoordPairs({ x, y }: CoordPair): CoordPair[] {
     const offsets = [-1, 0, 1];
 
-    return offsets
+    const result = offsets
       .flatMap((off1) => offsets.map((off2) => ({ x: x + off1, y: y + off2 })))
       .filter((coordPair) =>
         Object.values(coordPair).every((coord) => isInRange(coord)),
       );
+
+    console.log("occupiedCoords: ");
+    console.log(result);
+
+    return result;
   }
 
   function isInRange(x: number) {
