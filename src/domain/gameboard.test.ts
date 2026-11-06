@@ -2,7 +2,9 @@ import {
   createGameboard,
   placeShip,
   type PlacedShip,
+  type PlacementError,
   type ShipPlacementRequest,
+  type Gameboard,
 } from "./gameboard";
 import { createShip } from "./ship";
 
@@ -26,7 +28,6 @@ const requests: ShipPlacementRequest[] = [
 
 test("Should place ships accordingly", () => {
   let board = createGameboard();
-
   requests.forEach((r) => {
     const newBoard = placeShip(board, r);
 
@@ -67,4 +68,35 @@ test("Should place ships accordingly", () => {
   ];
 
   expect(board.placedShips).toEqual(expectedShips);
+});
+
+const invalidreq1: ShipPlacementRequest = {
+  ship: createShip(5),
+  headCoords: { x: 6, y: 0 },
+  direction: "right",
+};
+
+test("should complain about ship length", () => {
+  const board = createGameboard();
+  const complaint: PlacementError = "ship is too long";
+  expect(placeShip(board, invalidreq1)).toEqual(complaint);
+});
+
+const invalidreq2: ShipPlacementRequest = {
+  ship: createShip(2),
+  headCoords: { x: 2, y: 1 },
+  direction: "right",
+};
+
+test("should complain about other ships", () => {
+  const board = placeShip(createGameboard(), {
+    ship: createShip(2),
+    headCoords: { x: 0, y: 0 },
+    direction: "right",
+  });
+  if (typeof board === "string") {
+    throw new Error("Something went wrong. Check the earlier tests again.");
+  }
+  const complaint: PlacementError = "too close to other ship";
+  expect(placeShip(board, invalidreq2)).toEqual(complaint);
 });

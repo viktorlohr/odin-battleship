@@ -57,8 +57,11 @@ export function placeShip(
     shipCoords.push(coord);
   }
   const placedShip = { shipCoords };
+  console.log("placedShip Coords: ");
+  console.log(placedShip);
 
-  return { ...board, placedShips: [...board.placedShips, placedShip] };
+  const result = { ...board, placedShips: [...board.placedShips, placedShip] };
+  return result;
 
   function isCoordInRange(coord: CoordPair): boolean {
     return Object.values(coord).every((coord) => 0 <= coord && coord < 10);
@@ -82,9 +85,6 @@ function getOccupiedCoords(board: Gameboard): CoordPair[] {
       .filter((coordPair) =>
         Object.values(coordPair).every((coord) => isInRange(coord)),
       );
-
-    console.log("occupiedCoords: ");
-    console.log(result);
 
     return result;
   }
