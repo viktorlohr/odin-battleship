@@ -51,9 +51,13 @@ export function createGame() {
       return "game over";
     }
   }
+  function getCurrentPlayer() {
+    return state.currentPlayer;
+  }
 
   return {
-    getCurrentPlayerData: getCurrentPlayerData,
+    getCurrentPlayerData,
+    getCurrentPlayer,
     executeCommand,
   };
 }
