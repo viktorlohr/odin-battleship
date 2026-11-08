@@ -25,6 +25,7 @@ export type GamePhase = "place ships" | "battle" | "game over";
 export type GameStateResult = Result<GameState, GameError>;
 export type GameError = GameboardError | GamePhaseError;
 export type GamePhaseError =
+  | "Game over"
   | "Game already over"
   | "Cannot place any more ships. Battle has already begun"
   | "Battle has not begun yet. Someone still needs to place their ships";
@@ -60,6 +61,9 @@ export function attack(
   const newBoard = newBoardResult.val;
 
   const gamePhase = hasLost(newBoard) ? "game over" : "battle";
+  if (gamePhase === "game over") {
+    return err("Game over");
+  }
 
   return ok({
     ...state,

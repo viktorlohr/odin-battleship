@@ -3,7 +3,6 @@ import {
   getEnemy,
   initGameState,
   placeShip,
-  type PlayerId,
 } from "./domain/game-state";
 import type {
   CoordPair,
@@ -23,9 +22,9 @@ export interface PlayerSpecificData {
 export function createGame() {
   let state = initGameState();
 
-  function getPlayerSpecificData(p: PlayerId) {
+  function getCurrentPlayerData() {
     return {
-      board: state.boards[p],
+      board: state.boards[state.currentPlayer],
       attacksOnEmeny: state.boards[getEnemy(state)].attackedCoords,
     };
   }
@@ -47,10 +46,14 @@ export function createGame() {
     }
 
     state = stateResult.val;
+
+    if (state.gamePhase === "game over") {
+      return "game over";
+    }
   }
 
   return {
-    getPlayerSpecificData,
+    getCurrentPlayerData: getCurrentPlayerData,
     executeCommand,
   };
 }
