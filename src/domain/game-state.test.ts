@@ -1,3 +1,3 @@
-import { initGameState } from "./game-state";
-
-let state = initGameState();
+import { ok } from "./game-error";
+import { initGameState, placeShip, type GameStateResult } from "./game-state";
+import { createPlacementRequest } from "./gameboard";
