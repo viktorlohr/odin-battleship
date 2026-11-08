@@ -1,4 +1,4 @@
-import { ok, type Result } from "./game-error";
+import { err, ok, type Result } from "./game-error";
 import {
   createGameboard,
   receiveAttack,
@@ -19,8 +19,11 @@ export interface GameState {
 
 export type GamePhase = "place ships" | "battle";
 
-export type GameError = GameboardError;
 export type GameStateResult = Result<GameState, GameError>;
+export type GameError = GameboardError | GamePhaseError;
+export type GamePhaseError =
+  | "Cannot place any more ships. Battle has already begun"
+  | "Battle has not begun yet. Someone still needs to place their ships";
 
 export function initGameState(): GameState {
   return {
@@ -34,7 +37,13 @@ export function attack(
   state: GameState,
   coordPair: CoordPair,
 ): GameStateResult {
-  const enemy = state.currentPlayer === "A" ? "B" : "A";
+  if (state.gamePhase === "place ships") {
+    return err(
+      "Battle has not begun yet. Someone still needs to place their ships",
+    );
+  }
+
+  const enemy = getEnemy(state);
 
   const newBoardResult = receiveAttack(state.boards[enemy], coordPair);
   if (!newBoardResult.ok) {
@@ -49,10 +58,14 @@ export function attack(
   });
 }
 
-function placeShip(
+export function placeShip(
   state: GameState,
   request: ShipPlacementRequest,
 ): GameStateResult {
+  if (state.gamePhase === "battle") {
+    return err("Cannot place any more ships. Battle has already begun");
+  }
+
   const board = state.boards[state.currentPlayer];
   const newBoardResult = recieveShipPlacement(board, request);
 
@@ -63,6 +76,11 @@ function placeShip(
 
   return ok({
     ...state,
+    currentPlayer: getEnemy(state),
     boards: { ...state.boards, [state.currentPlayer]: newBoard },
   });
+}
+
+function getEnemy(state: GameState): PlayerId {
+  return state.currentPlayer === "A" ? "B" : "A";
 }
