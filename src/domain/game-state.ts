@@ -12,7 +12,7 @@ import {
 } from "./gameboard";
 
 const PLAYER_IDS = ["A", "B"] as const;
-type PlayerId = (typeof PLAYER_IDS)[number];
+export type PlayerId = (typeof PLAYER_IDS)[number];
 
 export interface GameState {
   readonly currentPlayer: PlayerId;
@@ -98,6 +98,6 @@ export function placeShip(
   });
 }
 
-function getEnemy(state: GameState): PlayerId {
+export function getEnemy(state: GameState): PlayerId {
   return state.currentPlayer === "A" ? "B" : "A";
 }

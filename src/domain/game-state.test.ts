@@ -111,9 +111,10 @@ test("should leave own board untouched after attack", () => {
   const newState = newStateResult.val;
 
   expect(newState.boards.A).toEqual(state.boards.A);
+  expect(newState.currentPlayer).toEqual("B");
 });
 
-test.only("should leave enemy board untouched after ship placement", () => {
+test("should leave enemy board untouched after ship placement", () => {
   const state: GameState = {
     gamePhase: "place ships",
     currentPlayer: "A",
@@ -141,4 +142,5 @@ test.only("should leave enemy board untouched after ship placement", () => {
   const newState = newStateResult.val;
 
   expect(newState.boards.B).toEqual(state.boards.B);
+  expect(newState.currentPlayer).toEqual("B");
 });
