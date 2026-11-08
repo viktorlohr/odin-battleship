@@ -1,3 +1,4 @@
+import { colorAnsiiRed, colorAnsiiYellow } from "../utils";
 import { err, ok, type Result } from "./game-error";
 import { createShip, type Ship } from "./ship";
 
@@ -201,24 +202,27 @@ export function createMockBoard() {
 export function prettyPrintBoard(board: Gameboard) {
   const shipCoords = getAllShipCoords(board);
   const attackedCoords = board.attackedCoords;
-  const boardDisplay = [];
   for (let i = 0; i < 10; i++) {
     const row = [];
     for (let j = 0; j < 10; j++) {
-      let symbol = "0";
-      if (shipCoords.some((c) => c.x === i && c.y === j)) {
-        symbol = "S";
+      let symbol = "_";
+
+      const isHit = attackedCoords.some((c) => c.x === i && c.y === j);
+      const isShip = shipCoords.some((c) => c.x === i && c.y === j);
+
+      if (isHit && isShip) {
+        symbol = colorAnsiiRed("S");
+      } else if (isShip) {
+        symbol = colorAnsiiYellow("S");
+      } else if (isHit) {
+        symbol = colorAnsiiRed("X");
       }
-      if (attackedCoords.some((c) => c.x === i && c.y === j)) {
-        symbol = "X";
-      }
+
       row.push(symbol);
     }
-    boardDisplay.push(row);
+    console.log(row.join(" "));
   }
-
-  console.table(boardDisplay);
-  console.log("Explanation: 0 = nothing, 1 = ship, 2 = attacked");
+  console.log("S: Ship, red: attacked");
 }
 
 function convertRequestToCoords(request: ShipPlacementRequest) {

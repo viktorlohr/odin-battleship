@@ -3,9 +3,9 @@ export function colorAnsiiRed(s: string) {
 }
 
 export function colorAnsiiYellow(s: string) {
-  return colorAnsi(s, "32");
+  return colorAnsi(s, "33");
 }
 
 function colorAnsi(s: string, code: string) {
-  return "\x1b[" + code + "m" + s + "\x1b[0m";
+  return `\x1b[${code}m${s}\x1b[0m`;
 }
