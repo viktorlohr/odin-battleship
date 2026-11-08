@@ -155,3 +155,7 @@ export function getNotYetPlacedShips(board: Gameboard): Ship[] {
 
   return unplacedLengths.map((n) => createShip(n));
 }
+
+export function placedAllShips(board: Gameboard): boolean {
+  return board.placedShips.length === 4;
+}

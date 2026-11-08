@@ -1,6 +1,8 @@
 import { err, ok, type Result } from "./game-error";
 import {
   createGameboard,
+  hasLost,
+  placedAllShips,
   receiveAttack,
   recieveShipPlacement,
   type CoordPair,
@@ -9,7 +11,8 @@ import {
   type ShipPlacementRequest,
 } from "./gameboard";
 
-export type PlayerId = "A" | "B";
+const PLAYER_IDS = ["A", "B"] as const;
+type PlayerId = (typeof PLAYER_IDS)[number];
 
 export interface GameState {
   readonly currentPlayer: PlayerId;
@@ -17,7 +20,7 @@ export interface GameState {
   readonly boards: Record<PlayerId, Gameboard>;
 }
 
-export type GamePhase = "place ships" | "battle";
+export type GamePhase = "place ships" | "battle" | "game over";
 
 export type GameStateResult = Result<GameState, GameError>;
 export type GameError = GameboardError | GamePhaseError;
@@ -51,8 +54,11 @@ export function attack(
   }
   const newBoard = newBoardResult.val;
 
+  const gamePhase = hasLost(newBoard) ? "game over" : "battle";
+
   return ok({
     ...state,
+    gamePhase,
     currentPlayer: enemy,
     boards: { ...state.boards, [enemy]: newBoard },
   });
@@ -74,8 +80,13 @@ export function placeShip(
   }
   const newBoard = newBoardResult.val;
 
+  const gamePhase = PLAYER_IDS.every((p) => placedAllShips(state.boards[p]))
+    ? "battle"
+    : "place ships";
+
   return ok({
     ...state,
+    gamePhase,
     currentPlayer: getEnemy(state),
     boards: { ...state.boards, [state.currentPlayer]: newBoard },
   });
