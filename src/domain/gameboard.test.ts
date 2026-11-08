@@ -132,36 +132,52 @@ test("should assert that all ships have been placed", () => {
   expect(hasAllShipsPlaced(board)).toBe(true);
 });
 
-test.("should attack 0,0", () => {
+test("should attack 0,4", () => {
   const board = {
     attackedCoords: [],
     placedShips: [],
   };
 
-  const newBoardResult = receiveAttack(board, createCoordPair(0, 0));
+  const newBoardResult = receiveAttack(board, createCoordPair(0, 4));
 
   if (!newBoardResult.ok) {
     throw new Error(newBoardResult.err);
   }
   const newBoard = newBoardResult.val;
 
-  expect(newBoard.attackedCoords).toEqual([{ x: 0, y: 0 }]);
+  expect(newBoard.attackedCoords).toEqual([{ x: 0, y: 4 }]);
 });
 
-
-test.only("should complain about coords", () => {
+test("should complain about out of range coords", () => {
   const board = {
     attackedCoords: [],
     placedShips: [],
-  }
+  };
 
-  const newBoardResult = receiveAttack(board, createCoordPair(10,0)); 
+  const newBoardResult = receiveAttack(board, { x: 10, y: 0 });
 
   if (newBoardResult.ok) {
-    throw new Error ("should not be ok")
+    throw new Error("should not be ok");
   }
   const err = newBoardResult.err;
-  const complaint: GameboardError = "coords out of range"
+  const complaint: GameboardError = "coords out of range";
 
   expect(err).toEqual(complaint);
-})
+});
+
+test("should complain that coords were already attacked", () => {
+  const board = {
+    attackedCoords: [{ x: 0, y: 0 }],
+    placedShips: [],
+  };
+
+  const newBoardResult = receiveAttack(board, createCoordPair(0, 0));
+
+  if (newBoardResult.ok) {
+    throw new Error("should not be ok");
+  }
+  const err = newBoardResult.err;
+  const complaint: GameboardError = "already attacked these coords";
+
+  expect(err).toEqual(complaint);
+});
