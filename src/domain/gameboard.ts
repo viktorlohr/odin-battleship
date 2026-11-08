@@ -68,8 +68,7 @@ export function receiveShipPlacement(
   const shipCoords = convertRequestToCoords(request);
 
   const occupiedCoords = getOccupiedCoords(board);
-  // @ts-expect-error only returns on error
-  shipCoords.forEach((coordPair) => {
+  for (const coordPair of shipCoords) {
     if (!isCoordInRange(coordPair)) {
       return err("ship is too long");
     }
@@ -78,7 +77,7 @@ export function receiveShipPlacement(
     ) {
       return err("too close to other ship");
     }
-  });
+  }
 
   const placedShip = { shipCoords };
 
@@ -240,5 +239,3 @@ function convertRequestToCoords(request: ShipPlacementRequest) {
 
   return shipCoords;
 }
-
-prettyPrintBoard(createMockBoard());

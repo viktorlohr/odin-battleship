@@ -70,35 +70,36 @@ test("Should place ships accordingly", () => {
   expect(board.placedShips).toEqual(expectedShips);
 });
 
-const invalidreq1: ShipPlacementRequest = {
-  ship: createShip(5),
-  headCoords: { x: 6, y: 0 },
-  direction: "right",
-};
-
 test("should complain about ship length", () => {
+  const invalidreq: ShipPlacementRequest = {
+    ship: createShip(5),
+    headCoords: { x: 6, y: 0 },
+    direction: "right",
+  };
   const board = createGameboard();
   const complaint: PlacementError = "ship is too long";
-  expect(receiveShipPlacement(board, invalidreq1)).toEqual(err(complaint));
+  expect(receiveShipPlacement(board, invalidreq)).toEqual(err(complaint));
 });
 
-const invalidreq2: ShipPlacementRequest = {
-  ship: createShip(2),
-  headCoords: { x: 2, y: 1 },
-  direction: "right",
-};
-
 test("should complain about other ships", () => {
+  const invalidreq: ShipPlacementRequest = {
+    ship: createShip(5),
+    headCoords: { x: 2, y: 1 },
+    direction: "right",
+  };
+
   const boardResult = receiveShipPlacement(createGameboard(), {
     ship: createShip(2),
     headCoords: { x: 0, y: 0 },
     direction: "right",
   });
   if (!boardResult.ok) {
-    throw new Error("Should not throw. Check the previous tests in this file");
+    throw new Error("Should be ok. Check the previous tests in this file");
   }
   const complaint: PlacementError = "too close to other ship";
-  expect(receiveShipPlacement(boardResult.val, invalidreq2)).toEqual(err(complaint));
+  expect(receiveShipPlacement(boardResult.val, invalidreq)).toEqual(
+    err(complaint),
+  );
 });
 
 test("should assert that ship sunk", () => {
@@ -113,7 +114,7 @@ test("should assert that ship sunk", () => {
   expect(isSunk(attackedCoords, ship)).toBe(true);
 });
 
-test.only("should assert that all ships have been placed", () => {
+test("should assert that all ships have been placed", () => {
   const board: Gameboard = {
     attackedCoords: [],
     placedShips: [
