@@ -4,11 +4,11 @@ import {
   hasLost,
   hasAllShipsPlaced,
   receiveAttack,
-  recieveShipPlacement,
   type CoordPair,
   type Gameboard,
   type GameboardError,
   type ShipPlacementRequest,
+  receiveShipPlacement,
 } from "./gameboard";
 
 const PLAYER_IDS = ["A", "B"] as const;
@@ -82,7 +82,7 @@ export function placeShip(
   }
 
   const board = state.boards[state.currentPlayer];
-  const newBoardResult = recieveShipPlacement(board, request);
+  const newBoardResult = receiveShipPlacement(board, request);
 
   if (!newBoardResult.ok) {
     return newBoardResult;

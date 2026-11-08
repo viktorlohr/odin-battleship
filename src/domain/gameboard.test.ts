@@ -3,7 +3,7 @@ import {
   createGameboard,
   hasAllShipsPlaced,
   isSunk,
-  recieveShipPlacement,
+  receiveShipPlacement,
   type Gameboard,
   type PlacedShip,
   type PlacementError,
@@ -34,7 +34,7 @@ test("Should place ships accordingly", () => {
 
   // @ts-expect-error lambda expression is expected to return nothing here if result is ok
   requests.forEach((r) => {
-    const newBoardResult = recieveShipPlacement(board, r);
+    const newBoardResult = receiveShipPlacement(board, r);
 
     if (!newBoardResult.ok) {
       return newBoardResult;
@@ -79,7 +79,7 @@ const invalidreq1: ShipPlacementRequest = {
 test("should complain about ship length", () => {
   const board = createGameboard();
   const complaint: PlacementError = "ship is too long";
-  expect(recieveShipPlacement(board, invalidreq1)).toEqual(err(complaint));
+  expect(receiveShipPlacement(board, invalidreq1)).toEqual(err(complaint));
 });
 
 const invalidreq2: ShipPlacementRequest = {
@@ -89,7 +89,7 @@ const invalidreq2: ShipPlacementRequest = {
 };
 
 test("should complain about other ships", () => {
-  const boardResult = recieveShipPlacement(createGameboard(), {
+  const boardResult = receiveShipPlacement(createGameboard(), {
     ship: createShip(2),
     headCoords: { x: 0, y: 0 },
     direction: "right",
@@ -98,9 +98,7 @@ test("should complain about other ships", () => {
     throw new Error("Should not throw. Check the previous tests in this file");
   }
   const complaint: PlacementError = "too close to other ship";
-  expect(recieveShipPlacement(boardResult.val, invalidreq2)).toEqual(
-    err(complaint),
-  );
+  expect(receiveShipPlacement(boardResult.val, invalidreq2)).toEqual(err(complaint));
 });
 
 test("should assert that ship sunk", () => {

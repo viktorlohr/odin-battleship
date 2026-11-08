@@ -53,7 +53,7 @@ export function createGameboard(): Gameboard {
   return { attackedCoords: [], placedShips: [] };
 }
 
-export function recieveShipPlacement(
+export function receiveShipPlacement(
   board: Gameboard,
   request: ShipPlacementRequest,
 ): GameboardResult {
@@ -64,30 +64,22 @@ export function recieveShipPlacement(
   ) {
     return err("already placed this ship");
   }
-  const shipCoords: CoordPair[] = [];
-  const direction = request.direction;
-
-  const x = request.headCoords.x;
-  const y = request.headCoords.y;
+  const shipCoords = convertRequestToCoords(request);
 
   const occupiedCoords = getOccupiedCoords(board);
-
-  for (let i = 0; i < request.ship.shipLength; i++) {
-    const coord = direction === "right" ? { x: x + i, y } : { x, y: y + i };
-
-    if (!isCoordInRange(coord)) {
+  // @ts-expect-error only returns on error
+  shipCoords.forEach((coordPair) => {
+    if (!isCoordInRange(coordPair)) {
       return err("ship is too long");
     }
-
-    if (occupiedCoords.some((o) => o.x === coord.x && o.y === coord.y)) {
+    if (
+      occupiedCoords.some((o) => o.x === coordPair.x && o.y === coordPair.y)
+    ) {
       return err("too close to other ship");
     }
+  });
 
-    shipCoords.push(coord);
-  }
   const placedShip = { shipCoords };
-  console.log("placedShip Coords: ");
-  console.log(placedShip);
 
   const result = { ...board, placedShips: [...board.placedShips, placedShip] };
   return ok(result);
@@ -175,37 +167,38 @@ export function createPlacementRequest(
   };
 }
 
-export function convertRequestToShipCoords(request: ShipPlacementRequest) {
-  const shipCoords: CoordPair[] = [];
-  const direction = request.direction;
-
-  const x = request.headCoords.x;
-  const y = request.headCoords.y;
-
-  for (let i = 0; i < request.ship.shipLength; i++) {
-    const coordPair = direction === "right" ? { x: x + i, y } : { x, y: y + i };
-
-    if (!isCoordInRange(coordPair)) {
-      return err("ship is too long");
-    }
-
-    shipCoords.push(coordPair);
-  }
+export function createMockPlacedShip(
+  length: number,
+  head_x: number,
+  head_y: number,
+  direction: "d" | "r" = "r",
+): PlacedShip {
+  return {
+    shipCoords: convertRequestToCoords({
+      ship: createShip(length),
+      headCoords: { x: head_x, y: head_y },
+      direction: direction === "d" ? "down" : "right",
+    }),
+  };
 }
 
-// export function createMockBoard(board: Gameboard) {
-//   const board = {
-//     attackedCoords: [createCoordPair(0,0), createCoordPair(2,2), createCoordPair(2,3)]
-//     placedShips: [
-//       {shipCoords}
-//     ]
-//   }
-//   return
-// }
+export function createMockBoard() {
+  return {
+    attackedCoords: [
+      createCoordPair(0, 0),
+      createCoordPair(2, 2),
+      createCoordPair(2, 3),
+    ],
+    placedShips: [
+      createMockPlacedShip(2, 0, 0),
+      createMockPlacedShip(3, 0, 2),
+      createMockPlacedShip(4, 0, 4),
+      createMockPlacedShip(5, 0, 6),
+    ],
+  };
+}
 
 export function prettyPrintBoard(board: Gameboard) {
-  console.log("This is their board (0: nothing, 1: ship, 2: attacked):");
-
   const shipCoords = getAllShipCoords(board);
   const attackedCoords = board.attackedCoords;
   const boardDisplay = [];
@@ -225,4 +218,23 @@ export function prettyPrintBoard(board: Gameboard) {
   }
 
   console.table(boardDisplay);
+  console.log("Explanation: 0 = nothing, 1 = ship, 2 = attacked");
 }
+
+function convertRequestToCoords(request: ShipPlacementRequest) {
+  const shipCoords: CoordPair[] = [];
+  const direction = request.direction;
+
+  const x = request.headCoords.x;
+  const y = request.headCoords.y;
+
+  for (let i = 0; i < request.ship.shipLength; i++) {
+    const coordPair = direction === "right" ? { x: x + i, y } : { x, y: y + i };
+
+    shipCoords.push(coordPair);
+  }
+
+  return shipCoords;
+}
+
+prettyPrintBoard(createMockBoard());

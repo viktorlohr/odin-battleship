@@ -56,6 +56,7 @@ export function pl(
   printPlayerData();
 }
 
+// @ts-expect-error only returns error
 export function att(x: number, y: number) {
   const err = Game.executeCommand({
     kind: "attack",
