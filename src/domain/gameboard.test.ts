@@ -1,10 +1,15 @@
 import { err } from "./game-error";
 import {
+  createCoordPair,
   createGameboard,
+  createMockBoard,
+  createMockPlacedShip,
   hasAllShipsPlaced,
   isSunk,
+  receiveAttack,
   receiveShipPlacement,
   type Gameboard,
+  type GameboardError,
   type PlacedShip,
   type PlacementError,
   type ShipPlacementRequest,
@@ -126,3 +131,37 @@ test("should assert that all ships have been placed", () => {
   };
   expect(hasAllShipsPlaced(board)).toBe(true);
 });
+
+test.("should attack 0,0", () => {
+  const board = {
+    attackedCoords: [],
+    placedShips: [],
+  };
+
+  const newBoardResult = receiveAttack(board, createCoordPair(0, 0));
+
+  if (!newBoardResult.ok) {
+    throw new Error(newBoardResult.err);
+  }
+  const newBoard = newBoardResult.val;
+
+  expect(newBoard.attackedCoords).toEqual([{ x: 0, y: 0 }]);
+});
+
+
+test.only("should complain about coords", () => {
+  const board = {
+    attackedCoords: [],
+    placedShips: [],
+  }
+
+  const newBoardResult = receiveAttack(board, createCoordPair(10,0)); 
+
+  if (newBoardResult.ok) {
+    throw new Error ("should not be ok")
+  }
+  const err = newBoardResult.err;
+  const complaint: GameboardError = "coords out of range"
+
+  expect(err).toEqual(complaint);
+})
