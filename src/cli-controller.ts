@@ -1,21 +1,39 @@
-import type { Direction } from "./domain/gameboard";
+import { getAllShipCoords, type Direction } from "./domain/gameboard";
 import { createShip } from "./domain/ship";
-import { createGame } from "./game-service";
+import { createGame, type PlayerSpecificData } from "./game-service";
 
 // const c = await import("./src/cli-controller.ts")
 
 const Game = createGame();
 
-export function get() {
-  console.log(`It is ${Game.getCurrentPlayer()}'s turn.`);
-  console.log("These are their placed ships:");
-  console.table(
-    Game.getCurrentPlayerData().board.placedShips.map((ps) => ps.shipCoords),
-  );
-  console.log("These spots have been attacked already:");
-  console.log(Game.getCurrentPlayerData().board.attackedCoords);
+export function printPlayerData(
+  data: PlayerSpecificData = Game.getCurrentPlayerData(),
+) {
+  console.log("This is their board (0: nothing, 1: ship, 2: attacked):");
+
+  const shipCoords = getAllShipCoords(data.board);
+  const attackedCoords = data.board.attackedCoords;
+  const boardDisplay = [];
+  for (let i = 0; i < 10; i++) {
+    const row = [];
+    for (let j = 0; j < 10; j++) {
+      let symbol = "0";
+      if (shipCoords.some((c) => c.x === i && c.y === j)) {
+        symbol = "S";
+      }
+      if (attackedCoords.some((c) => c.x === i && c.y === j)) {
+        symbol = "X";
+      }
+      row.push(symbol);
+    }
+    boardDisplay.push(row);
+  }
+
+  console.table(boardDisplay);
+  return boardDisplay;
 }
 
+// @ts-expect-error only returns on
 export function pl(
   head_x: number,
   head_y: number,
@@ -35,7 +53,7 @@ export function pl(
     return err;
   }
 
-  get();
+  printPlayerData();
 }
 
 export function att(x: number, y: number) {
@@ -48,5 +66,5 @@ export function att(x: number, y: number) {
     return err;
   }
 
-  get();
+  printPlayerData();
 }

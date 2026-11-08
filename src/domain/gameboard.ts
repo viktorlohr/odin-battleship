@@ -174,3 +174,55 @@ export function createPlacementRequest(
     direction,
   };
 }
+
+export function convertRequestToShipCoords(request: ShipPlacementRequest) {
+  const shipCoords: CoordPair[] = [];
+  const direction = request.direction;
+
+  const x = request.headCoords.x;
+  const y = request.headCoords.y;
+
+  for (let i = 0; i < request.ship.shipLength; i++) {
+    const coordPair = direction === "right" ? { x: x + i, y } : { x, y: y + i };
+
+    if (!isCoordInRange(coordPair)) {
+      return err("ship is too long");
+    }
+
+    shipCoords.push(coordPair);
+  }
+}
+
+// export function createMockBoard(board: Gameboard) {
+//   const board = {
+//     attackedCoords: [createCoordPair(0,0), createCoordPair(2,2), createCoordPair(2,3)]
+//     placedShips: [
+//       {shipCoords}
+//     ]
+//   }
+//   return
+// }
+
+export function prettyPrintBoard(board: Gameboard) {
+  console.log("This is their board (0: nothing, 1: ship, 2: attacked):");
+
+  const shipCoords = getAllShipCoords(board);
+  const attackedCoords = board.attackedCoords;
+  const boardDisplay = [];
+  for (let i = 0; i < 10; i++) {
+    const row = [];
+    for (let j = 0; j < 10; j++) {
+      let symbol = "0";
+      if (shipCoords.some((c) => c.x === i && c.y === j)) {
+        symbol = "S";
+      }
+      if (attackedCoords.some((c) => c.x === i && c.y === j)) {
+        symbol = "X";
+      }
+      row.push(symbol);
+    }
+    boardDisplay.push(row);
+  }
+
+  console.table(boardDisplay);
+}
