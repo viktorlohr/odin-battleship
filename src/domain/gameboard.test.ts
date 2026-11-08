@@ -1,8 +1,10 @@
 import { err } from "./game-error";
 import {
   createGameboard,
+  hasAllShipsPlaced,
   isSunk,
   recieveShipPlacement,
+  type Gameboard,
   type PlacedShip,
   type PlacementError,
   type ShipPlacementRequest,
@@ -111,4 +113,17 @@ test("should assert that ship sunk", () => {
   };
 
   expect(isSunk(attackedCoords, ship)).toBe(true);
+});
+
+test.only("should assert that all ships have been placed", () => {
+  const board: Gameboard = {
+    attackedCoords: [],
+    placedShips: [
+      { shipCoords: [{ x: 0, y: 0 }] },
+      { shipCoords: [{ x: 0, y: 0 }] },
+      { shipCoords: [{ x: 0, y: 0 }] },
+      { shipCoords: [{ x: 0, y: 0 }] },
+    ],
+  };
+  expect(hasAllShipsPlaced(board)).toBe(true);
 });

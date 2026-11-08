@@ -2,7 +2,7 @@ import { err, ok, type Result } from "./game-error";
 import {
   createGameboard,
   hasLost,
-  placedAllShips,
+  hasAllShipsPlaced,
   receiveAttack,
   recieveShipPlacement,
   type CoordPair,
@@ -85,15 +85,16 @@ export function placeShip(
   }
   const newBoard = newBoardResult.val;
 
-  const gamePhase = PLAYER_IDS.every((p) => placedAllShips(state.boards[p]))
+  const boards = { ...state.boards, [state.currentPlayer]: newBoard };
+  const gamePhase = PLAYER_IDS.every((p) => hasAllShipsPlaced(boards[p]))
     ? "battle"
     : "place ships";
 
   return ok({
     ...state,
-    gamePhase,
     currentPlayer: getEnemy(state),
-    boards: { ...state.boards, [state.currentPlayer]: newBoard },
+    gamePhase,
+    boards,
   });
 }
 
