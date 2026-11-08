@@ -22,11 +22,13 @@ export interface CoordPair {
   readonly y: number;
 }
 
-export function createCoordPair(x: number, y: number) {
+export function createCoordPair(x: number, y: number): CoordPair {
   const result = { x, y };
   if (!isCoordInRange(result)) {
     throw new Error("invalid coords");
   }
+
+  return result;
 }
 
 function isCoordInRange(coord: CoordPair): boolean {
@@ -158,4 +160,17 @@ export function getNotYetPlacedShips(board: Gameboard): Ship[] {
 
 export function placedAllShips(board: Gameboard): boolean {
   return board.placedShips.length === 4;
+}
+
+export function createPlacementRequest(
+  length: number,
+  head_x: number,
+  head_y: number,
+  direction: Direction,
+) {
+  return {
+    ship: createShip(length),
+    headCoords: createCoordPair(head_x, head_y),
+    direction,
+  };
 }
