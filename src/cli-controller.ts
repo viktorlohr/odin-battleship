@@ -14,7 +14,7 @@ export function printPlayerData(
   prettyPrintBoard(data.board);
 }
 
-// @ts-expect-error only returns on
+// @ts-expect-error only returns on error
 export function pl(
   head_x: number,
   head_y: number,

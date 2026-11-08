@@ -13,7 +13,8 @@ export type GameboardError = PlacementError | AttackError;
 
 export type GameboardResult = Result<Gameboard, GameboardError>;
 
-export type AttackError = "already attacked these coords";
+export type AttackError =
+  "already attacked these coords" | "coords out of range";
 
 export type PlacementError =
   "ship is too long" | "too close to other ship" | "already placed this ship";
@@ -129,6 +130,9 @@ export function receiveAttack(
   board: Gameboard,
   coordPair: CoordPair,
 ): GameboardResult {
+  if (!isCoordInRange(coordPair)) {
+    return err("coords out of range");
+  }
   if (board.attackedCoords.some((cp) => areCoordsEqual(cp, coordPair))) {
     return err("already attacked these coords");
   }
