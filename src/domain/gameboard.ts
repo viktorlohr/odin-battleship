@@ -51,7 +51,7 @@ export function createGameboard(): Gameboard {
   return { attackedCoords: [], placedShips: [] };
 }
 
-export function placeShip(
+export function recieveShipPlacement(
   board: Gameboard,
   request: ShipPlacementRequest,
 ): GameboardResult {

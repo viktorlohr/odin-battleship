@@ -2,9 +2,11 @@ import { ok, type Result } from "./game-error";
 import {
   createGameboard,
   receiveAttack,
+  recieveShipPlacement,
   type CoordPair,
   type Gameboard,
   type GameboardError,
+  type ShipPlacementRequest,
 } from "./gameboard";
 
 export type PlayerId = "A" | "B";
@@ -47,11 +49,20 @@ export function attack(
   });
 }
 
-// function placeShip(
-//   state: GameState,
-//   headCoords: CoordPair,
-//   ship: Ship
-// ) {
-//   const board = state.boards[state.currentPlayer]
-//   if
-// }
+function placeShip(
+  state: GameState,
+  request: ShipPlacementRequest,
+): GameStateResult {
+  const board = state.boards[state.currentPlayer];
+  const newBoardResult = recieveShipPlacement(board, request);
+
+  if (!newBoardResult.ok) {
+    return newBoardResult;
+  }
+  const newBoard = newBoardResult.val;
+
+  return ok({
+    ...state,
+    boards: { ...state.boards, [state.currentPlayer]: newBoard },
+  });
+}
