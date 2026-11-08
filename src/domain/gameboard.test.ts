@@ -35,7 +35,7 @@ test("Should place ships accordingly", () => {
     const newBoardResult = placeShip(board, r);
 
     if (!newBoardResult.ok) {
-      return newBoardResult.err;
+      return newBoardResult;
     }
 
     board = newBoardResult.val;

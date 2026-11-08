@@ -1,7 +1,6 @@
 import { ok, type Result } from "./game-error";
 import {
   createGameboard,
-  getNotYetPlacedShips,
   receiveAttack,
   type CoordPair,
   type Gameboard,
@@ -48,39 +47,11 @@ export function attack(
   });
 }
 
-// function modifyBoard(
+// function placeShip(
 //   state: GameState,
-//   player: PlayerId,
-//   f: (b: Gameboard) => GameboardResult,
-// ): GameStateResult {
-//   const boards = state.boards;
-
-//   const newBoardResult = f(boards[player]);
-
-//   if (!newBoardResult.ok) {
-//     return newBoardResult.err;
-//   }
-//   const newBoard = newBoardResult.val;
-
-//   return { ...state, boards: { ...boards, [player]: newBoard } };
+//   headCoords: CoordPair,
+//   ship: Ship
+// ) {
+//   const board = state.boards[state.currentPlayer]
+//   if
 // }
-
-// switch (state.gamePhase.desc) {
-//     case "place ships": {
-//       const shipsToPlace = getNotYetPlacedShips(
-//         state.boards[state.currentPlayer],
-//       );
-
-//       if (shipsToPlace.length === 0) {
-//         return ok({
-//           ...state,
-//           gamePhase: {
-//             desc: "place ships",
-//             isDone: { ...state.gamePhase.isDone, [state.currentPlayer]: true },
-//           },
-//         });
-//       }
-
-//     }
-
-//   }

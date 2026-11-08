@@ -142,6 +142,10 @@ export function receiveAttack(
   return ok({ ...board, attackedCoords: [...board.attackedCoords, coordPair] });
 }
 
+export function getAlreadyPlacedShips(board: Gameboard): Ship[] {
+  return board.placedShips.map((ps) => createShip(ps.shipCoords.length));
+}
+
 export function getNotYetPlacedShips(board: Gameboard): Ship[] {
   const placedShipLengths = board.placedShips.map((s) => s.shipCoords.length);
 
