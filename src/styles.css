@@ -1,7 +1,7 @@
 @import "./styles/reset.css";
 
-.netural {
-  background-color: blue;
+.neutral {
+  background-color: rgb(57, 57, 227);
 }
 
 .hit {
@@ -14,4 +14,14 @@
 
 .miss {
   background-color: grey;
+}
+
+.cell {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid black;
+}
+
+.board {
+  display: flex;
 }

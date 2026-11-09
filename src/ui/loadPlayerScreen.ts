@@ -5,12 +5,15 @@ import {
   type Gameboard,
 } from "../domain/gameboard";
 import type { PlayerSpecificData } from "../game-service";
+import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
-  document.getElementById("content")?.append(document);
+  const boardEl = getBoardEl(playerData.board);
+
+  contentEl.append(boardEl);
 }
 
-function displayOwnBoard(board: Gameboard) {
+function getBoardEl(board: Gameboard) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 
@@ -18,27 +21,27 @@ function displayOwnBoard(board: Gameboard) {
     const rowEl = document.createElement("div");
     for (let j = 0; j < BOARD_LENGTH; j++) {
       const cellEl = document.createElement("div");
+      cellEl.classList.add("cell");
 
-      const coordStatus = getCoordStatus(createCoordPair(i, j), board);
+      const { isShip, isAttacked } = getCoordStatus(
+        createCoordPair(i, j),
+        board,
+      );
 
-      switch (coordStatus) {
-        case { isShip: false, isAttacked: false }:
-          cellEl.classList.add("neutral");
-          break;
-        case { isShip: true, isAttacked: false }:
-          cellEl.classList.add("ship");
-          break;
-        case { isShip: false, isAttacked: true }:
-          cellEl.classList.add("miss");
-          break;
-        case { isShip: true, isAttacked: true }:
-          cellEl.classList.add("hit");
-          break;
+      let cssClass = "neutral";
+      if (isShip && !isAttacked) {
+        cssClass = "ship";
+      } else if (!isShip && isAttacked) {
+        cssClass = "miss";
+      } else if (isShip && isAttacked) {
+        cssClass = "neutral";
       }
+      cellEl.classList.add(cssClass);
+
       rowEl.appendChild(cellEl);
     }
     boardEl.appendChild(rowEl);
   }
 
-  document.getElementById("content");
+  return boardEl;
 }

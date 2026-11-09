@@ -62,10 +62,10 @@ export function createGame() {
   };
 }
 
-export function createMockPlayerData() {
+export function createMockPlayerData(): PlayerSpecificData {
   return {
     playerId: "A",
     board: createMockBoard(),
-    attacksOnEnemey: [],
+    attacksOnEnemy: [],
   };
 }

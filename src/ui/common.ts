@@ -1,9 +1,9 @@
-export function getContentEl(): HTMLElement {
-  const contentEl = document.getElementById("content");
+export const contentEl = (() => {
+  const c = document.getElementById("content");
 
-  if (!contentEl) {
+  if (!c) {
     throw new Error("no Content Element found");
   }
 
-  return contentEl;
-}
+  return c;
+})();
