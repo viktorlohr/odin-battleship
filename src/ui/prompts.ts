@@ -102,19 +102,29 @@ export function openPrompt(data: PromptData) {
         direction: directionSelectEl.value as Direction,
       };
 
-      data.executePlacementCmd({
+      const err = data.executePlacementCmd({
         kind: "place ship",
         request,
       });
+
+      if (err) {
+        promptEl.remove();
+        displayErrorMsg(err);
+      }
     });
   } else /* if (data.kind === "attack") */ {
     yesBtn.addEventListener("click", (e) => {
       e.preventDefault();
 
-      data.executeAttackCmd({
+      const err = data.executeAttackCmd({
         kind: "attack",
         coordPair: createCoordPair(data.x_coord, data.y_coord),
       });
+
+      if (err) {
+        promptEl.remove();
+        displayErrorMsg(err);
+      }
     });
   }
 
@@ -126,4 +136,12 @@ export function openPrompt(data: PromptData) {
   BtnContainer.append(yesBtn, noBtn);
   promptEl.appendChild(BtnContainer);
   contentEl.appendChild(promptEl);
+}
+
+export function displayErrorMsg(err: string) {
+  const errorEl = document.createElement("div");
+  errorEl.classList.add("error");
+  errorEl.textContent = err;
+
+  contentEl.appendChild(errorEl);
 }

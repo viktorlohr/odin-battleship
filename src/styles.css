@@ -53,7 +53,8 @@ h2 {
   gap: 1rem;
 }
 
-.prompt {
+.prompt,
+.error {
   position: fixed;
   left: 50%;
   bottom: 15%;
@@ -63,6 +64,12 @@ h2 {
   border-radius: 12px;
 }
 
-.prompt > * {
+.prompt,
+.error > * {
   margin: 1rem;
+}
+
+.error {
+  font-size: 1.3rem;
+  color: red;
 }
