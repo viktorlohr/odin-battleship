@@ -27,6 +27,21 @@ export type PromptPayload =
 export type PromptData = CellData & PromptPayload;
 
 export function openPrompt(data: PromptData) {
+  if (document.querySelector(".prompt") !== null) {
+    console.log("other prompt is open");
+    return;
+  }
+
+  Array.from(document.querySelectorAll(".error")).map((el) => {
+    el.remove();
+  });
+
+  Array.from(document.querySelectorAll(".highlighted")).map((el) => {
+    el.classList.remove("highlighted");
+  });
+
+  data.cellEl.classList.add("highlighted");
+
   const promptEl = document.createElement("div");
   promptEl.classList.add("prompt");
   const textEl = document.createElement("div");
@@ -36,7 +51,7 @@ export function openPrompt(data: PromptData) {
       break;
     case "place ship":
       textEl.textContent =
-        "Do you want to place your ship on the highlighted position?";
+        "Do you want to place your ship at the highlighted position?";
       break;
   }
   promptEl.appendChild(textEl);
@@ -131,6 +146,7 @@ export function openPrompt(data: PromptData) {
   noBtn.addEventListener("click", (e) => {
     e.preventDefault();
     promptEl.remove();
+    data.cellEl.classList.remove("highlighted");
   });
 
   BtnContainer.append(yesBtn, noBtn);
@@ -139,6 +155,11 @@ export function openPrompt(data: PromptData) {
 }
 
 export function displayErrorMsg(err: string) {
+  const oldmsgs = Array.from(document.querySelectorAll(".error"));
+  oldmsgs.map((m) => {
+    m.remove();
+  });
+
   const errorEl = document.createElement("div");
   errorEl.classList.add("error");
   errorEl.textContent = err;

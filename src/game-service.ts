@@ -71,7 +71,7 @@ export function createGame() {
     });
 
     if (state.gamePhase === "game over") {
-      return "Game over! Player " + state.currentPlayer + "won!";
+      return "Game over! Player " + state.currentPlayer + " won!";
     }
   }
 

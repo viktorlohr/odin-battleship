@@ -10,7 +10,7 @@ Game.subscribe(render);
 
 loadPlayerScreen(Game.getCurrentPlayerData());
 
-export function render() {
+function render() {
   contentEl.replaceChildren();
   const phaseEl = document.createElement("h2");
   const phase = Game.getCurrentPlayerData().gamePhase;

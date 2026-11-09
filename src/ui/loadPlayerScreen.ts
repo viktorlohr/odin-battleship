@@ -63,6 +63,7 @@ function createBoardEl(
 
       cellEl.addEventListener("click", (e) => {
         e.preventDefault();
+
         openPrompt({ ...cellData, ...promptPayload });
       });
 
