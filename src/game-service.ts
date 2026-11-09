@@ -8,7 +8,6 @@ import {
 import {
   createMockBoard,
   type CoordPair,
-  type CoordStatus,
   type Gameboard,
   type ShipPlacementRequest,
 } from "./domain/gameboard";

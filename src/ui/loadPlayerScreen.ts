@@ -6,7 +6,9 @@ import {
 } from "../domain/gameboard";
 import type { PlayerSpecificData } from "../game-service";
 
-export function loadPlayerScreen(playerData: PlayerSpecificData) {}
+export function loadPlayerScreen(playerData: PlayerSpecificData) {
+  document.getElementById("content")?.append(document);
+}
 
 function displayOwnBoard(board: Gameboard) {
   const boardEl = document.createElement("div");
