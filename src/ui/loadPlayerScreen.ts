@@ -8,19 +8,29 @@ import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
-  const ownBoardStatusMap = createCoordStatusMap(playerData.board);
-  const ownBoardEl = createBoardEl(ownBoardStatusMap);
+  const ownBoardHeader = document.createElement("h2");
+  ownBoardHeader.textContent = "This is your own board:";
 
-  contentEl.append(ownBoardEl);
+  const ownCoordStatusMap = createCoordStatusMap(playerData.board);
+  const ownBoardEl = createBoardEl(ownCoordStatusMap);
+
+  const enemyBoardHeader = document.createElement("h2");
+  enemyBoardHeader.textContent = "This is your enemies board:";
+
+  const enemyCoordStatusMap = playerData.enemyCoordStatusMap;
+  console.log(enemyCoordStatusMap);
+  const enemyBoardEl = createBoardEl(enemyCoordStatusMap);
+
+  contentEl.append(ownBoardHeader, ownBoardEl, enemyBoardHeader, enemyBoardEl);
 }
 
 function createBoardEl(statusMap: CoordStatusMap) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 
-  for (let i = 0; i < BOARD_LENGTH; i++) {
+  for (let j = 0; j < BOARD_LENGTH; j++) {
     const rowEl = document.createElement("div");
-    for (let j = 0; j < BOARD_LENGTH; j++) {
+    for (let i = 0; i < BOARD_LENGTH; i++) {
       const cellEl = document.createElement("div");
       cellEl.classList.add("cell");
 

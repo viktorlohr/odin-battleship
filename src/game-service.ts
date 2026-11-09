@@ -6,7 +6,9 @@ import {
   type PlayerId,
 } from "./domain/game-state";
 import {
+  createCoordStatusMap,
   createMockBoard,
+  type CoordStatusMap,
   type CoordTupleStr,
   type Gameboard,
   type ShipPlacementRequest,
@@ -19,7 +21,7 @@ export type Command =
 export interface PlayerSpecificData {
   readonly playerId: PlayerId;
   readonly board: Gameboard;
-  readonly attacksOnEnemy: CoordTupleStr[];
+  readonly enemyCoordStatusMap: CoordStatusMap;
 }
 
 export function createGame() {
@@ -29,7 +31,10 @@ export function createGame() {
     return {
       playerId: state.currentPlayer,
       board: state.boards[state.currentPlayer],
-      attacksOnEnemy: state.boards[getEnemy(state)].attackedCoords,
+      enemyCoordStatusMap: createCoordStatusMap(
+        state.boards[getEnemy(state)],
+        true,
+      ),
     };
   }
 
@@ -66,6 +71,6 @@ export function createMockPlayerData(): PlayerSpecificData {
   return {
     playerId: "A",
     board: createMockBoard(),
-    attacksOnEnemy: [],
+    enemyCoordStatusMap: createCoordStatusMap(createMockBoard(), true),
   };
 }

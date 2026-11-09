@@ -1,6 +1,7 @@
 import { err } from "./game-error";
 import {
   createCoordPair,
+  createCoordStatusMap,
   createGameboard,
   createMockPlacedShip,
   getCoordStatus,
@@ -228,4 +229,19 @@ test("should confirm that there is nothing at (0,0)", () => {
     isShip: false,
     isAttacked: false,
   });
+});
+
+test("should hide the unattacked ship part but show the attacked one", () => {
+  const board: Gameboard = {
+    attackedCoords: [createCoordPair(0, 0)],
+    placedShips: [createMockPlacedShip(2, 0, 0)],
+  };
+
+  const statusMap = createCoordStatusMap(board, true);
+
+  expect(
+    Object.values(statusMap).every(
+      (status) => status.isShip && !status.isAttacked,
+    ),
+  ).toBe(false);
 });
