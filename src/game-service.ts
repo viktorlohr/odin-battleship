@@ -9,6 +9,7 @@ import {
 import {
   createCoordStatusMap,
   createMockBoard,
+  getNotYetPlacedShips,
   type CoordStatusMap,
   type CoordTupleStr,
   type Gameboard,
@@ -24,6 +25,8 @@ export interface PlayerSpecificData {
   readonly gamePhase: GamePhase;
   readonly board: Gameboard;
   readonly enemyCoordStatusMap: CoordStatusMap;
+  readonly remainingShipLengths: number[];
+  readonly executeCommand: (cmd: Command) => undefined | string;
 }
 
 export function createGame() {
@@ -38,11 +41,15 @@ export function createGame() {
         state.boards[getEnemy(state)],
         true,
       ),
+      remainingShipLengths: getNotYetPlacedShips(
+        state.boards[state.currentPlayer],
+      ).map((s) => s.shipLength),
+      executeCommand,
     };
   }
 
   // @ts-expect-error only returns if error
-  function executeCommand(cmd: Command) {
+  function executeCommand(cmd: Command): undefined | string {
     let stateResult;
     switch (cmd.kind) {
       case "place ship":

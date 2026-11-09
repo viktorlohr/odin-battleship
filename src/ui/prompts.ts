@@ -1,7 +1,8 @@
 import { createCoordPair } from "../domain/gameboard";
 import type { Command } from "../game-service";
+import { contentEl } from "./common";
 
-export interface CellElData {
+export interface CellData {
   x_coord: number;
   y_coord: number;
   cellEl: HTMLElement;
@@ -18,7 +19,7 @@ export type PromptPayload =
       placeCmd: (cmd: Command) => undefined | string;
     };
 
-export type PromptData = CellElData & PromptPayload;
+export type PromptData = CellData & PromptPayload;
 
 export function openPrompt(data: PromptData) {
   const promptEl = document.createElement("div");
@@ -74,6 +75,8 @@ export function openPrompt(data: PromptData) {
       directionLabelEl,
       directionSelectEl,
     );
+
+    promptEl.appendChild(formEl);
   }
 
   const yesBtn = document.createElement("button");
@@ -96,4 +99,5 @@ export function openPrompt(data: PromptData) {
 
   BtnContainer.append(yesBtn, noBtn);
   promptEl.append(textEl, BtnContainer);
+  contentEl.appendChild(promptEl);
 }
