@@ -1,20 +1,20 @@
 import {
   BOARD_LENGTH,
-  createCoordPair,
-  getCoordStatus,
-  type CoordPairAndStatus,
-  type Gameboard,
+  createCoordTupleString,
+  createCoordTupleStrStatusMap,
+  type CoordStatus,
 } from "../domain/gameboard";
 import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
-  const boardEl = createBoardEl(playerData.board);
+  const ownBoardStatusMap = createCoordTupleStrStatusMap(playerData.board);
+  const ownBoardEl = createBoardEl(ownBoardStatusMap);
 
-  contentEl.append(boardEl);
+  contentEl.append(ownBoardEl);
 }
 
-function createBoardEl(coordPairsAndStatus: CoordPairAndStatus[]) {
+function createBoardEl(statusMap: Record<string, CoordStatus>) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 
@@ -24,10 +24,15 @@ function createBoardEl(coordPairsAndStatus: CoordPairAndStatus[]) {
       const cellEl = document.createElement("div");
       cellEl.classList.add("cell");
 
-      const { isShip, isAttacked } = getCoordStatus(
-        createCoordPair(i, j),
-        board,
-      );
+      const key = createCoordTupleString(i, j);
+
+      const lookupResult = statusMap[key];
+
+      if (!lookupResult) {
+        throw new Error("Status map does not get created correctly.");
+      }
+
+      const { isShip, isAttacked } = lookupResult;
 
       let cssClass = "neutral";
       if (isShip && !isAttacked) {
