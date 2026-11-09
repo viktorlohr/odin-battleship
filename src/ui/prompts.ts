@@ -1,24 +1,27 @@
-import { createCoordPair, type Direction } from "../domain/gameboard";
+import { createCoordPair } from "../domain/gameboard";
 import type { Command } from "../game-service";
 
-export type PromptData =
+export interface CellElData {
+  x_coord: number;
+  y_coord: number;
+  cellEl: HTMLElement;
+}
+
+export type PromptPayload =
   | {
       kind: "attack";
       text: "Do you want to attack the highlighted position?";
-      x_coord: number;
-      y_coord: number;
-      headCellEl: HTMLElement;
       attackCmd: (cmd: Command) => undefined | string;
     }
   | {
       kind: "place ship";
       text: "Do you want to place your ship on the highlighted position?";
-      head_x: number;
-      head_y: number;
       remainingShipLengths: number[];
-      headCellEl: HTMLElement;
+      cellEl: HTMLElement;
       placeCmd: (cmd: Command) => undefined | string;
     };
+
+export type PromptData = CellElData & PromptPayload;
 
 export function openPrompt(data: PromptData) {
   const promptEl = document.createElement("div");

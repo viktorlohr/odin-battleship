@@ -6,6 +6,7 @@ import {
 } from "../domain/gameboard";
 import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
+import type { PromptPayload } from "./prompts";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
   contentEl.replaceChildren();
@@ -29,10 +30,7 @@ function displayBoards(playerData: PlayerSpecificData) {
   contentEl.append(ownBoardHeader, ownBoardEl, enemyBoardHeader, enemyBoardEl);
 }
 
-function createBoardEl(
-  statusMap: CoordStatusMap,
-  commandPromptFn: (x: number, y: number, cellEL: HTMLElement) => void,
-) {
+function createBoardEl(statusMap: CoordStatusMap, commandPromptFn: () => void) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 
@@ -43,7 +41,7 @@ function createBoardEl(
 
       cellEl.addEventListener("click", (e) => {
         e.preventDefault();
-        commandPromptFn(i, j, cellEl);
+        commandPromptFn(prompt);
       });
 
       const key = createCoordKey(i, j);
