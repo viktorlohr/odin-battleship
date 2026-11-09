@@ -186,7 +186,7 @@ export function createMockPlacedShip(
   };
 }
 
-export function createMockBoard() {
+export function createMockBoard(): Gameboard {
   return {
     attackedCoords: [
       createCoordPair(0, 0),

@@ -2,8 +2,6 @@ import { err } from "./game-error";
 import {
   createCoordPair,
   createGameboard,
-  createMockBoard,
-  createMockPlacedShip,
   hasAllShipsPlaced,
   isSunk,
   receiveAttack,
