@@ -60,14 +60,16 @@ export function createGame() {
     state = stateResult.val;
 
     if (state.gamePhase === "game over") {
-      return "Game over! Player" + state.currentPlayer + "won!";
+      return "Game over! Player " + state.currentPlayer + "won!";
     }
   }
 
-  const subscribers: (() => [])[] = [];
-  subscribers.map((s) => s());
+  const subscribers: (() => void)[] = [];
+  subscribers.map((s) => {
+    s();
+  });
 
-  function subscribe(f: () => []) {
+  function subscribe(f: () => void) {
     subscribers.push(f);
   }
 

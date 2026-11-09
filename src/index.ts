@@ -1,7 +1,9 @@
-import { createMockPlayerData } from "./game-service";
+import { createGame } from "./game-service";
 import "./styles.css";
 import { loadPlayerScreen } from "./ui/loadPlayerScreen";
 
-const mockData = createMockPlayerData();
+const Game = createGame();
 
-loadPlayerScreen(mockData);
+Game.subscribe(() => {
+  loadPlayerScreen(Game.getCurrentPlayerData());
+});

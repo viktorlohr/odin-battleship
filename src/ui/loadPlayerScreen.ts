@@ -8,6 +8,7 @@ import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
+  contentEl.replaceChildren();
   displayBoards(playerData);
 }
 
@@ -28,7 +29,10 @@ function displayBoards(playerData: PlayerSpecificData) {
   contentEl.append(ownBoardHeader, ownBoardEl, enemyBoardHeader, enemyBoardEl);
 }
 
-function createBoardEl(statusMap: CoordStatusMap) {
+function createBoardEl(
+  statusMap: CoordStatusMap,
+  commandPromptFn: (x: number, y: number) => void,
+) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 
@@ -36,7 +40,11 @@ function createBoardEl(statusMap: CoordStatusMap) {
     const rowEl = document.createElement("div");
     for (let i = 0; i < BOARD_LENGTH; i++) {
       const cellEl = document.createElement("div");
-      cellEl.classList.add("cell");
+
+      cellEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        commandPromptFn(i, j);
+      });
 
       const key = createCoordKey(i, j);
 
@@ -56,7 +64,7 @@ function createBoardEl(statusMap: CoordStatusMap) {
       } else if (isShip && isAttacked) {
         cssClass = "hit";
       }
-      cellEl.classList.add(cssClass);
+      cellEl.classList.add("cell", key, cssClass);
 
       rowEl.appendChild(cellEl);
     }
