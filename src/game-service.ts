@@ -5,10 +5,12 @@ import {
   placeShip,
   type PlayerId,
 } from "./domain/game-state";
-import type {
-  CoordPair,
-  Gameboard,
-  ShipPlacementRequest,
+import {
+  createMockBoard,
+  type CoordPair,
+  type CoordStatus,
+  type Gameboard,
+  type ShipPlacementRequest,
 } from "./domain/gameboard";
 
 export type Command =
@@ -58,5 +60,13 @@ export function createGame() {
   return {
     getCurrentPlayerData,
     executeCommand,
+  };
+}
+
+export function createMockPlayerData() {
+  return {
+    playerId: "A",
+    board: createMockBoard(),
+    attacksOnEnemey: [],
   };
 }

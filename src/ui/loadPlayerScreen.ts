@@ -33,7 +33,9 @@ function displayOwnBoard(board: Gameboard) {
           cellEl.classList.add("hit");
           break;
       }
+      rowEl.appendChild(cellEl);
     }
+    boardEl.appendChild(rowEl);
   }
 
   document.getElementById("content");

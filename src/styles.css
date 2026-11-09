@@ -1,1 +1,17 @@
 @import "./styles/reset.css";
+
+.netural {
+  background-color: blue;
+}
+
+.hit {
+  background-color: red;
+}
+
+.ship {
+  background-color: yellow;
+}
+
+.miss {
+  background-color: grey;
+}

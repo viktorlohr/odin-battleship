@@ -244,14 +244,14 @@ function convertRequestToCoords(request: ShipPlacementRequest) {
   return shipCoords;
 }
 
-export interface CellStatus {
+export interface CoordStatus {
   isShip: boolean;
   isAttacked: boolean;
 }
 export function getCoordStatus(
   coordPair: CoordPair,
   board: Gameboard,
-): CellStatus {
+): CoordStatus {
   const shipCoords = getAllShipCoords(board);
 
   const isShip = shipCoords.some((cp) => areCoordsEqual(cp, coordPair));
@@ -261,4 +261,16 @@ export function getCoordStatus(
   );
 
   return { isShip, isAttacked };
+}
+
+export interface AttackOnEnemy {
+  coordPair: CoordPair;
+  coordStatus: CoordStatus;
+}
+
+export function getAttacksForEnemy(board: Gameboard): AttackOnEnemy[] {
+  return board.attackedCoords.map((coordPair) => ({
+    coordPair,
+    coordStatus: getCoordStatus(coordPair, board),
+  }));
 }
