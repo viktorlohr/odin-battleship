@@ -54,9 +54,9 @@ export function openPrompt(data: PromptData) {
     const lengthLabelEl = document.createElement("label");
     lengthLabelEl.textContent = "Choose your ship length";
     lengthLabelEl.setAttribute("for", "length");
-    const lengthSelectEl = document.createElement("input");
+    const lengthSelectEl = document.createElement("select");
     lengthSelectEl.setAttribute("id", "length");
-    lengthSelectEl.setAttribute("type", "select");
+    // lengthSelectEl.setAttribute("type", "select");
     lengthSelectEl.append(
       ...data.remainingShipLengths.map((l) => {
         const optionEl = document.createElement("option");
@@ -69,7 +69,7 @@ export function openPrompt(data: PromptData) {
     directionLabelEl.textContent = "Choose the direction of the ship";
     directionLabelEl.setAttribute("for", "direction");
     const directionSelectEl = document.createElement("select");
-    directionSelectEl.setAttribute("type", "select");
+    // directionSelectEl.setAttribute("type", "select");
     directionSelectEl.setAttribute("id", "direction");
     directionSelectEl.append(
       ...["right", "down"].map((d) => {

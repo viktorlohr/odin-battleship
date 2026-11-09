@@ -50,6 +50,7 @@ h2 {
 .btn-container {
   display: flex;
   flex-direction: row;
+  gap: 1rem;
 }
 
 .prompt {
@@ -57,4 +58,11 @@ h2 {
   left: 50%;
   bottom: 15%;
   transform: translateX(-50%);
+  background-color: black;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.prompt > * {
+  margin: 1rem;
 }

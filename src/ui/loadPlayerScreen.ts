@@ -33,7 +33,6 @@ function displayBoards(playerData: PlayerSpecificData) {
   enemyBoardHeader.textContent = "This is their enemy's board:";
 
   const enemyCoordStatusMap = playerData.enemyCoordStatusMap;
-  console.log(enemyCoordStatusMap);
 
   const attackPromptPayload: PromptPayload = {
     kind: "attack",

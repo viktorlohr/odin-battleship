@@ -7,3 +7,5 @@ const Game = createGame();
 Game.subscribe(() => {
   loadPlayerScreen(Game.getCurrentPlayerData());
 });
+
+loadPlayerScreen(Game.getCurrentPlayerData());

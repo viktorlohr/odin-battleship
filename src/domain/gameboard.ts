@@ -150,7 +150,7 @@ export function getAlreadyPlacedShips(board: Gameboard): Ship[] {
 export function getNotYetPlacedShips(board: Gameboard): Ship[] {
   const placedShipLengths = board.placedShips.map((s) => s.shipCoords.length);
 
-  const unplacedLengths = [1, 2, 3, 4, 5].filter(
+  const unplacedLengths = [2, 3, 4, 5].filter(
     (n) => !placedShipLengths.some((m) => n === m),
   );
 
