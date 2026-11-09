@@ -35,8 +35,8 @@ function displayBoards(playerData: PlayerSpecificData) {
   const enemyCoordStatusMap = playerData.enemyCoordStatusMap;
   console.log(enemyCoordStatusMap);
 
-  const attackPromptPayload = {
-    kind: "attack ship",
+  const attackPromptPayload: PromptPayload = {
+    kind: "attack",
     executeAttackCmd: playerData.executeCommand,
   };
   const enemyBoardEl = createBoardEl(enemyCoordStatusMap, attackPromptPayload);

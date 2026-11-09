@@ -1,4 +1,9 @@
-import { createCoordPair } from "../domain/gameboard";
+import {
+  createCoordPair,
+  type Direction,
+  type ShipPlacementRequest,
+} from "../domain/gameboard";
+import { createShip } from "../domain/ship";
 import type { Command } from "../game-service";
 import { contentEl } from "./common";
 
@@ -34,9 +39,14 @@ export function openPrompt(data: PromptData) {
         "Do you want to place your ship on the highlighted position?";
       break;
   }
+  promptEl.appendChild(textEl);
 
   const BtnContainer = document.createElement("div");
   BtnContainer.classList.add("btn-container");
+  const yesBtn = document.createElement("button");
+  yesBtn.textContent = "Yes";
+  const noBtn = document.createElement("button");
+  noBtn.textContent = "No";
 
   if (data.kind === "place ship") {
     const formEl = document.createElement("form");
@@ -77,27 +87,33 @@ export function openPrompt(data: PromptData) {
     );
 
     promptEl.appendChild(formEl);
+
+    yesBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const request: ShipPlacementRequest = {
+        headCoords: createCoordPair(data.x_coord, data.y_coord),
+        ship: createShip(Number(lengthSelectEl.value)),
+        direction: directionSelectEl.value as Direction,
+      };
+
+      data.executePlacementCmd({
+        kind: "place ship",
+        request,
+      });
+    });
+  } else /* if (data.kind === "attack") */ {
+    yesBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      data.executeAttackCmd({
+        kind: "attack",
+        coordPair: createCoordPair(data.x_coord, data.y_coord),
+      });
+    });
   }
 
-  const yesBtn = document.createElement("button");
-  yesBtn.textContent = "Yes";
-  yesBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    switch (data.kind) {
-      case "attack":
-        data.executeAttackCmd({
-          kind: "attack",
-          coordPair: createCoordPair(data.x_coord, data.y_coord),
-        });
-      // TODO
-    }
-  });
-
-  const noBtn = document.createElement("button");
-  noBtn.textContent = "No";
-
   BtnContainer.append(yesBtn, noBtn);
-  promptEl.append(textEl, BtnContainer);
+  promptEl.appendChild(BtnContainer);
   contentEl.appendChild(promptEl);
 }
