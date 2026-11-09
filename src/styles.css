@@ -24,4 +24,10 @@
 
 .board {
   display: flex;
+  flex-direction: column;
+}
+
+.board > * {
+  display: flex;
+  flex-direction: row;
 }
