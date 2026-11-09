@@ -2,6 +2,8 @@ import { err } from "./game-error";
 import {
   createCoordPair,
   createGameboard,
+  createMockPlacedShip,
+  getCoordStatus,
   hasAllShipsPlaced,
   isSunk,
   receiveAttack,
@@ -178,4 +180,52 @@ test("should complain that coords were already attacked", () => {
   const complaint: GameboardError = "already attacked these coords";
 
   expect(err).toEqual(complaint);
+});
+
+test("should confirm that there is an attacked ship at (0,0)", () => {
+  const board: Gameboard = {
+    attackedCoords: [createCoordPair(0, 0)],
+    placedShips: [createMockPlacedShip(2, 0, 0)],
+  };
+
+  expect(getCoordStatus(createCoordPair(0, 0), board)).toEqual({
+    isShip: true,
+    isAttacked: true,
+  });
+});
+
+test("should confirm that there is an unattacked ship at (0,0)", () => {
+  const board: Gameboard = {
+    attackedCoords: [],
+    placedShips: [createMockPlacedShip(2, 0, 0)],
+  };
+
+  expect(getCoordStatus(createCoordPair(0, 0), board)).toEqual({
+    isShip: true,
+    isAttacked: false,
+  });
+});
+
+test("should confirm that there is a missed attack at (0,0)", () => {
+  const board: Gameboard = {
+    attackedCoords: [createCoordPair(0, 0)],
+    placedShips: [],
+  };
+
+  expect(getCoordStatus(createCoordPair(0, 0), board)).toEqual({
+    isShip: false,
+    isAttacked: true,
+  });
+});
+
+test("should confirm that there is nothing at (0,0)", () => {
+  const board: Gameboard = {
+    attackedCoords: [],
+    placedShips: [],
+  };
+
+  expect(getCoordStatus(createCoordPair(0, 0), board)).toEqual({
+    isShip: false,
+    isAttacked: false,
+  });
 });
