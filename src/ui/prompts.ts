@@ -1,4 +1,4 @@
-import { createCoordPair } from "../domain/gameboard";
+import { createCoordPair, type Direction } from "../domain/gameboard";
 import type { Command } from "../game-service";
 
 export type PromptData =
@@ -43,6 +43,27 @@ export function openPrompt(data: PromptData) {
         optionEl.textContent = String(l);
         return optionEl;
       }),
+    );
+
+    const directionLabelEl = document.createElement("label");
+    directionLabelEl.textContent = "Choose the direction of the ship";
+    directionLabelEl.setAttribute("for", "direction");
+    const directionSelectEl = document.createElement("select");
+    directionSelectEl.setAttribute("type", "select");
+    directionSelectEl.setAttribute("id", "direction");
+    directionSelectEl.append(
+      ...["right", "down"].map((d) => {
+        const optionEl = document.createElement("option");
+        optionEl.textContent = d;
+        return optionEl;
+      }),
+    );
+
+    formEl.append(
+      lengthLabelEl,
+      lengthSelectEl,
+      directionLabelEl,
+      directionSelectEl,
     );
   }
 
