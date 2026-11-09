@@ -1,20 +1,20 @@
 import {
   BOARD_LENGTH,
-  createCoordTupleString,
-  createCoordTupleStrStatusMap,
-  type CoordStatus,
+  createCoordKey,
+  createCoordStatusMap,
+  type CoordStatusMap,
 } from "../domain/gameboard";
 import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
-  const ownBoardStatusMap = createCoordTupleStrStatusMap(playerData.board);
+  const ownBoardStatusMap = createCoordStatusMap(playerData.board);
   const ownBoardEl = createBoardEl(ownBoardStatusMap);
 
   contentEl.append(ownBoardEl);
 }
 
-function createBoardEl(statusMap: Record<string, CoordStatus>) {
+function createBoardEl(statusMap: CoordStatusMap) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 
@@ -24,7 +24,7 @@ function createBoardEl(statusMap: Record<string, CoordStatus>) {
       const cellEl = document.createElement("div");
       cellEl.classList.add("cell");
 
-      const key = createCoordTupleString(i, j);
+      const key = createCoordKey(i, j);
 
       const lookupResult = statusMap[key];
 

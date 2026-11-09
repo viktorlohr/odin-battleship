@@ -266,11 +266,13 @@ export function getCoordStatus(
   return { isShip, isAttacked };
 }
 
-export function createCoordTupleStrStatusMap(
+export type CoordStatusMap = Record<string, CoordStatus>;
+
+export function createCoordStatusMap(
   board: Gameboard,
   isEnemy = false,
-): Record<string, CoordStatus> {
-  const map = {} as Record<string, CoordStatus>;
+): CoordStatusMap {
+  const map = {} as CoordStatusMap;
 
   for (let i = 0; i < BOARD_LENGTH; i++) {
     for (let j = 0; j < BOARD_LENGTH; j++) {
@@ -282,7 +284,7 @@ export function createCoordTupleStrStatusMap(
         status.isShip = false;
       }
 
-      const coordTupleStr = createCoordTupleString(i, j);
+      const coordTupleStr = createCoordKey(i, j);
       map[coordTupleStr] = { ...status };
     }
   }
@@ -290,6 +292,6 @@ export function createCoordTupleStrStatusMap(
   return map;
 }
 
-export function createCoordTupleString(i: number, j: number): string {
+export function createCoordKey(i: number, j: number): string {
   return `${String(i)},${String(j)}`;
 }
