@@ -19,7 +19,7 @@ export function loadPlayerScreen(playerData: PlayerSpecificData) {
 
 function displayBoards(playerData: PlayerSpecificData) {
   const ownBoardHeader = document.createElement("h2");
-  ownBoardHeader.textContent = `This is ${playerData.playerId}'s board:`;
+  ownBoardHeader.textContent = `This is Player ${playerData.playerId}'s board:`;
 
   const ownCoordStatusMap = createCoordStatusMap(playerData.board);
   const placePromptPayload: PromptPayload = {

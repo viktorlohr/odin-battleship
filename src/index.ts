@@ -2,6 +2,7 @@ import { createGame } from "./game-service";
 import "./styles.css";
 import { contentEl } from "./ui/common";
 import { loadPlayerScreen } from "./ui/loadPlayerScreen";
+import { loadWaitingScreen } from "./ui/loadWaitingScreen";
 
 const Game = createGame();
 
@@ -18,6 +19,7 @@ export function render() {
     const winnerId = Game.getCurrentPlayerData().playerId;
     phaseEl.textContent =
       "Game over! " + "Player " + winnerId + " won the game!";
+    contentEl.appendChild(phaseEl);
     return;
   }
 
@@ -28,5 +30,7 @@ export function render() {
   }
   contentEl.appendChild(phaseEl);
 
-  loadWaitingScreen();
+  loadWaitingScreen(() => {
+    loadPlayerScreen(Game.getCurrentPlayerData());
+  });
 }

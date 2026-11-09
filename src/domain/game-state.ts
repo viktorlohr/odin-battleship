@@ -61,9 +61,6 @@ export function attack(
   const newBoard = newBoardResult.val;
 
   const gamePhase = hasLost(newBoard) ? "game over" : "battle";
-  if (gamePhase === "game over") {
-    return err("Game over");
-  }
 
   return ok({
     ...state,
