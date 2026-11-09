@@ -8,14 +8,18 @@ import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
+  displayBoards(playerData);
+}
+
+function displayBoards(playerData: PlayerSpecificData) {
   const ownBoardHeader = document.createElement("h2");
-  ownBoardHeader.textContent = "This is your own board:";
+  ownBoardHeader.textContent = `This is ${playerData.playerId}'s board:`;
 
   const ownCoordStatusMap = createCoordStatusMap(playerData.board);
   const ownBoardEl = createBoardEl(ownCoordStatusMap);
 
   const enemyBoardHeader = document.createElement("h2");
-  enemyBoardHeader.textContent = "This is your enemies board:";
+  enemyBoardHeader.textContent = "This is their enemy's board:";
 
   const enemyCoordStatusMap = playerData.enemyCoordStatusMap;
   console.log(enemyCoordStatusMap);

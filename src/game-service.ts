@@ -3,6 +3,7 @@ import {
   getEnemy,
   initGameState,
   placeShip,
+  type GamePhase,
   type PlayerId,
 } from "./domain/game-state";
 import {
@@ -20,6 +21,7 @@ export type Command =
 
 export interface PlayerSpecificData {
   readonly playerId: PlayerId;
+  readonly gamePhase: GamePhase;
   readonly board: Gameboard;
   readonly enemyCoordStatusMap: CoordStatusMap;
 }
@@ -30,6 +32,7 @@ export function createGame() {
   function getCurrentPlayerData(): PlayerSpecificData {
     return {
       playerId: state.currentPlayer,
+      gamePhase: state.gamePhase,
       board: state.boards[state.currentPlayer],
       enemyCoordStatusMap: createCoordStatusMap(
         state.boards[getEnemy(state)],
@@ -57,19 +60,28 @@ export function createGame() {
     state = stateResult.val;
 
     if (state.gamePhase === "game over") {
-      return "game over";
+      return "Game over! Player" + state.currentPlayer + "won!";
     }
+  }
+
+  const subscribers: (() => [])[] = [];
+  subscribers.map((s) => s());
+
+  function subscribe(f: () => []) {
+    subscribers.push(f);
   }
 
   return {
     getCurrentPlayerData,
     executeCommand,
+    subscribe,
   };
 }
 
 export function createMockPlayerData(): PlayerSpecificData {
   return {
     playerId: "A",
+    gamePhase: "place ships",
     board: createMockBoard(),
     enemyCoordStatusMap: createCoordStatusMap(createMockBoard(), true),
   };
