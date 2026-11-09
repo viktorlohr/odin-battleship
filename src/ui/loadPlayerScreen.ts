@@ -34,7 +34,7 @@ function getBoardEl(board: Gameboard) {
       } else if (!isShip && isAttacked) {
         cssClass = "miss";
       } else if (isShip && isAttacked) {
-        cssClass = "neutral";
+        cssClass = "hit";
       }
       cellEl.classList.add(cssClass);
 
