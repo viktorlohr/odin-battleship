@@ -203,21 +203,21 @@ export function createMockBoard(): Gameboard {
 }
 
 export function prettyPrintBoard(board: Gameboard) {
-  const shipCoords = getAllShipCoords(board);
-  const attackedCoords = board.attackedCoords;
   for (let i = 0; i < 10; i++) {
     const row = [];
     for (let j = 0; j < 10; j++) {
       let symbol = "_";
 
-      const isHit = attackedCoords.some((c) => c.x === i && c.y === j);
-      const isShip = shipCoords.some((c) => c.x === i && c.y === j);
+      const { isAttacked, isShip } = getCoordStatus(
+        createCoordPair(i, j),
+        board,
+      );
 
-      if (isHit && isShip) {
+      if (isAttacked && isShip) {
         symbol = colorAnsiiRed("S");
       } else if (isShip) {
         symbol = colorAnsiiYellow("S");
-      } else if (isHit) {
+      } else if (isAttacked) {
         symbol = colorAnsiiRed("X");
       }
 
@@ -242,4 +242,23 @@ function convertRequestToCoords(request: ShipPlacementRequest) {
   }
 
   return shipCoords;
+}
+
+export interface CellStatus {
+  isShip: boolean;
+  isAttacked: boolean;
+}
+export function getCoordStatus(
+  coordPair: CoordPair,
+  board: Gameboard,
+): CellStatus {
+  const shipCoords = getAllShipCoords(board);
+
+  const isShip = shipCoords.some((cp) => areCoordsEqual(cp, coordPair));
+
+  const isAttacked = board.attackedCoords.some((cp) =>
+    areCoordsEqual(cp, coordPair),
+  );
+
+  return { isShip, isAttacked };
 }
