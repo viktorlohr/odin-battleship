@@ -1,5 +1,9 @@
 @import "./styles/reset.css";
 
+.highlighted {
+  background-color: yellow;
+}
+
 .neutral {
   background-color: rgb(57, 57, 227);
 }
@@ -9,11 +13,11 @@
 }
 
 .ship {
-  background-color: yellow;
+  background-color: rgb(171, 170, 170);
 }
 
 .miss {
-  background-color: grey;
+  background-color: orange;
 }
 
 .cell {

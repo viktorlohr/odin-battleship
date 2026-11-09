@@ -31,7 +31,7 @@ function displayBoards(playerData: PlayerSpecificData) {
 
 function createBoardEl(
   statusMap: CoordStatusMap,
-  commandPromptFn: (x: number, y: number) => void,
+  commandPromptFn: (x: number, y: number, cellEL: HTMLElement) => void,
 ) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
@@ -43,7 +43,7 @@ function createBoardEl(
 
       cellEl.addEventListener("click", (e) => {
         e.preventDefault();
-        commandPromptFn(i, j);
+        commandPromptFn(i, j, cellEl);
       });
 
       const key = createCoordKey(i, j);
