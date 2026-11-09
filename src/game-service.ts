@@ -7,19 +7,19 @@ import {
 } from "./domain/game-state";
 import {
   createMockBoard,
-  type CoordPair,
+  type CoordTupleStr,
   type Gameboard,
   type ShipPlacementRequest,
 } from "./domain/gameboard";
 
 export type Command =
   | { kind: "place ship"; request: ShipPlacementRequest }
-  | { kind: "attack"; coordPair: CoordPair };
+  | { kind: "attack"; coordPair: CoordTupleStr };
 
 export interface PlayerSpecificData {
   readonly playerId: PlayerId;
   readonly board: Gameboard;
-  readonly attacksOnEnemy: CoordPair[];
+  readonly attacksOnEnemy: CoordTupleStr[];
 }
 
 export function createGame() {

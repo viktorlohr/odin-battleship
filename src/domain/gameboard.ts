@@ -5,7 +5,7 @@ import { createShip, type Ship } from "./ship";
 export const BOARD_LENGTH = 10;
 
 export interface Gameboard {
-  readonly attackedCoords: CoordPair[];
+  readonly attackedCoords: CoordTupleStr[];
   readonly placedShips: PlacedShip[];
 }
 
@@ -19,12 +19,12 @@ export type AttackError =
 export type PlacementError =
   "ship is too long" | "too close to other ship" | "already placed this ship";
 
-export interface CoordPair {
+export interface CoordTupleStr {
   readonly x: number;
   readonly y: number;
 }
 
-export function createCoordPair(x: number, y: number): CoordPair {
+export function createCoordPair(x: number, y: number): CoordTupleStr {
   const result = { x, y };
   if (!isCoordInRange(result)) {
     throw new Error("invalid coords");
@@ -33,7 +33,7 @@ export function createCoordPair(x: number, y: number): CoordPair {
   return result;
 }
 
-function isCoordInRange(coord: CoordPair): boolean {
+function isCoordInRange(coord: CoordTupleStr): boolean {
   return Object.values(coord).every(
     (coord) => 0 <= coord && coord < BOARD_LENGTH,
   );
@@ -43,12 +43,12 @@ export type Direction = "right" | "down";
 
 export interface ShipPlacementRequest {
   readonly ship: Ship;
-  readonly headCoords: CoordPair;
+  readonly headCoords: CoordTupleStr;
   readonly direction: Direction;
 }
 
 export interface PlacedShip {
-  readonly shipCoords: CoordPair[];
+  readonly shipCoords: CoordTupleStr[];
 }
 
 export function createGameboard(): Gameboard {
@@ -86,16 +86,16 @@ export function receiveShipPlacement(
   return ok(result);
 }
 
-export function getAllShipCoords(board: Gameboard): CoordPair[] {
+export function getAllShipCoords(board: Gameboard): CoordTupleStr[] {
   return board.placedShips.flatMap((s) => s.shipCoords);
 }
 
-function getOccupiedCoords(board: Gameboard): CoordPair[] {
+function getOccupiedCoords(board: Gameboard): CoordTupleStr[] {
   return getAllShipCoords(board).flatMap((coordPair) =>
     getSurroundingCoordPairs(coordPair),
   );
 
-  function getSurroundingCoordPairs({ x, y }: CoordPair): CoordPair[] {
+  function getSurroundingCoordPairs({ x, y }: CoordTupleStr): CoordTupleStr[] {
     const offsets = [-1, 0, 1];
 
     const result = offsets
@@ -112,7 +112,10 @@ function getOccupiedCoords(board: Gameboard): CoordPair[] {
   }
 }
 
-export function isSunk(attackedCoords: CoordPair[], ship: PlacedShip): boolean {
+export function isSunk(
+  attackedCoords: CoordTupleStr[],
+  ship: PlacedShip,
+): boolean {
   return ship.shipCoords.every((sc) =>
     attackedCoords.some((ac) => areCoordsEqual(sc, ac)),
   );
@@ -122,13 +125,13 @@ export function hasLost(board: Gameboard): boolean {
   return board.placedShips.every((s) => isSunk(board.attackedCoords, s));
 }
 
-export function areCoordsEqual(p1: CoordPair, p2: CoordPair): boolean {
+export function areCoordsEqual(p1: CoordTupleStr, p2: CoordTupleStr): boolean {
   return p1.x === p2.x && p1.y === p2.y;
 }
 
 export function receiveAttack(
   board: Gameboard,
-  coordPair: CoordPair,
+  coordPair: CoordTupleStr,
 ): GameboardResult {
   if (!isCoordInRange(coordPair)) {
     return err("coords out of range");
@@ -229,7 +232,7 @@ export function prettyPrintBoard(board: Gameboard) {
 }
 
 function convertRequestToCoords(request: ShipPlacementRequest) {
-  const shipCoords: CoordPair[] = [];
+  const shipCoords: CoordTupleStr[] = [];
   const direction = request.direction;
 
   const x = request.headCoords.x;
@@ -249,7 +252,7 @@ export interface CoordStatus {
   isAttacked: boolean;
 }
 export function getCoordStatus(
-  coordPair: CoordPair,
+  coordPair: CoordTupleStr,
   board: Gameboard,
 ): CoordStatus {
   const shipCoords = getAllShipCoords(board);
@@ -263,14 +266,30 @@ export function getCoordStatus(
   return { isShip, isAttacked };
 }
 
-export interface AttackOnEnemy {
-  coordPair: CoordPair;
-  coordStatus: CoordStatus;
+export function createCoordTupleStrStatusMap(
+  board: Gameboard,
+  isEnemy = false,
+): Record<string, CoordStatus> {
+  const map = {} as Record<string, CoordStatus>;
+
+  for (let i = 0; i < BOARD_LENGTH; i++) {
+    for (let j = 0; j < BOARD_LENGTH; j++) {
+      const coordPair = createCoordPair(i, j);
+      const status = getCoordStatus(coordPair, board);
+
+      // hide unattacked ship parts from enemy
+      if (isEnemy && !status.isAttacked) {
+        status.isShip = false;
+      }
+
+      const coordTupleStr = createCoordTupleString(i, j);
+      map[coordTupleStr] = { ...status };
+    }
+  }
+
+  return map;
 }
 
-export function getAttacksForEnemy(board: Gameboard): AttackOnEnemy[] {
-  return board.attackedCoords.map((coordPair) => ({
-    coordPair,
-    coordStatus: getCoordStatus(coordPair, board),
-  }));
+export function createCoordTupleString(i: number, j: number): string {
+  return `${String(i)},${String(j)}`;
 }

@@ -2,18 +2,19 @@ import {
   BOARD_LENGTH,
   createCoordPair,
   getCoordStatus,
+  type CoordPairAndStatus,
   type Gameboard,
 } from "../domain/gameboard";
 import type { PlayerSpecificData } from "../game-service";
 import { contentEl } from "./common";
 
 export function loadPlayerScreen(playerData: PlayerSpecificData) {
-  const boardEl = getBoardEl(playerData.board);
+  const boardEl = createBoardEl(playerData.board);
 
   contentEl.append(boardEl);
 }
 
-function getBoardEl(board: Gameboard) {
+function createBoardEl(coordPairsAndStatus: CoordPairAndStatus[]) {
   const boardEl = document.createElement("div");
   boardEl.classList.add("board");
 

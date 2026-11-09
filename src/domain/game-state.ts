@@ -4,7 +4,7 @@ import {
   hasLost,
   hasAllShipsPlaced,
   receiveAttack,
-  type CoordPair,
+  type CoordTupleStr,
   type Gameboard,
   type GameboardError,
   type ShipPlacementRequest,
@@ -40,7 +40,7 @@ export function initGameState(): GameState {
 
 export function attack(
   state: GameState,
-  coordPair: CoordPair,
+  coordPair: CoordTupleStr,
 ): GameStateResult {
   if (state.gamePhase === "place ships") {
     return err(
