@@ -11,12 +11,12 @@ export interface CellData {
 export type PromptPayload =
   | {
       kind: "attack";
-      attackCmd: (cmd: Command) => undefined | string;
+      executeAttackCmd: (cmd: Command) => undefined | string;
     }
   | {
       kind: "place ship";
       remainingShipLengths: number[];
-      placeCmd: (cmd: Command) => undefined | string;
+      executePlacementCmd: (cmd: Command) => undefined | string;
     };
 
 export type PromptData = CellData & PromptPayload;
@@ -43,7 +43,7 @@ export function openPrompt(data: PromptData) {
 
     const lengthLabelEl = document.createElement("label");
     lengthLabelEl.textContent = "Choose your ship length";
-    lengthLabelEl.htmlFor = "length";
+    lengthLabelEl.setAttribute("for", "length");
     const lengthSelectEl = document.createElement("input");
     lengthSelectEl.setAttribute("id", "length");
     lengthSelectEl.setAttribute("type", "select");
@@ -86,7 +86,7 @@ export function openPrompt(data: PromptData) {
 
     switch (data.kind) {
       case "attack":
-        data.attackCmd({
+        data.executeAttackCmd({
           kind: "attack",
           coordPair: createCoordPair(data.x_coord, data.y_coord),
         });

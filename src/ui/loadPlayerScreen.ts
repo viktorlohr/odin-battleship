@@ -17,15 +17,16 @@ export function loadPlayerScreen(playerData: PlayerSpecificData) {
   displayBoards(playerData);
 }
 
-function displayBoards(
-  playerData: PlayerSpecificData,
-  attackPromptPayload: PromptPayload,
-  placePromptPayload: PromptPayload,
-) {
+function displayBoards(playerData: PlayerSpecificData) {
   const ownBoardHeader = document.createElement("h2");
   ownBoardHeader.textContent = `This is ${playerData.playerId}'s board:`;
 
   const ownCoordStatusMap = createCoordStatusMap(playerData.board);
+  const placePromptPayload: PromptPayload = {
+    kind: "place ship",
+    remainingShipLengths: playerData.remainingShipLengths,
+    executePlacementCmd: playerData.executeCommand,
+  };
   const ownBoardEl = createBoardEl(ownCoordStatusMap, placePromptPayload);
 
   const enemyBoardHeader = document.createElement("h2");
@@ -34,6 +35,10 @@ function displayBoards(
   const enemyCoordStatusMap = playerData.enemyCoordStatusMap;
   console.log(enemyCoordStatusMap);
 
+  const attackPromptPayload = {
+    kind: "attack ship",
+    executeAttackCmd: playerData.executeCommand,
+  };
   const enemyBoardEl = createBoardEl(enemyCoordStatusMap, attackPromptPayload);
 
   contentEl.append(ownBoardHeader, ownBoardEl, enemyBoardHeader, enemyBoardEl);

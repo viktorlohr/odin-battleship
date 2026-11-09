@@ -90,8 +90,10 @@ export function createGame() {
 export function createMockPlayerData(): PlayerSpecificData {
   return {
     playerId: "A",
-    gamePhase: "place ships",
+    gamePhase: "battle",
     board: createMockBoard(),
     enemyCoordStatusMap: createCoordStatusMap(createMockBoard(), true),
+    remainingShipLengths: [],
+    executeCommand: () => "",
   };
 }
