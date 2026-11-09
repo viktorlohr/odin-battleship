@@ -10,14 +10,11 @@ export interface CellElData {
 export type PromptPayload =
   | {
       kind: "attack";
-      text: "Do you want to attack the highlighted position?";
       attackCmd: (cmd: Command) => undefined | string;
     }
   | {
       kind: "place ship";
-      text: "Do you want to place your ship on the highlighted position?";
       remainingShipLengths: number[];
-      cellEl: HTMLElement;
       placeCmd: (cmd: Command) => undefined | string;
     };
 
@@ -27,7 +24,16 @@ export function openPrompt(data: PromptData) {
   const promptEl = document.createElement("div");
   promptEl.classList.add("prompt");
   const textEl = document.createElement("div");
-  textEl.textContent = data.text;
+  switch (data.kind) {
+    case "attack":
+      textEl.textContent = "Do you want to attack the highlighted position?";
+      break;
+    case "place ship":
+      textEl.textContent =
+        "Do you want to place your ship on the highlighted position?";
+      break;
+  }
+
   const BtnContainer = document.createElement("div");
   BtnContainer.classList.add("btn-container");
 
