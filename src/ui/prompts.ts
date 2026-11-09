@@ -49,6 +49,11 @@ export function openPrompt(data: PromptData) {
   noBtn.textContent = "No";
 
   if (data.kind === "place ship") {
+    if (data.remainingShipLengths.length === 0) {
+      promptEl.remove();
+      return;
+    }
+
     const formEl = document.createElement("form");
 
     const lengthLabelEl = document.createElement("label");
@@ -112,6 +117,11 @@ export function openPrompt(data: PromptData) {
       });
     });
   }
+
+  noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    promptEl.remove();
+  });
 
   BtnContainer.append(yesBtn, noBtn);
   promptEl.appendChild(BtnContainer);
